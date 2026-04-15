@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1776237487812,
+    "saunaId": "1691",
+    "saunaName": "妙法湯",
+    "saunaUrl": "https://sauna-ikitai.com/saunas/1691",
+    "saunaImage": "https://img.sauna-ikitai.com/sauna/1691_20231107_234012_g1KmUKN2nM_medium.jpg",
+    "posterName": "ふくだ",
+    "saunaType": "dry",
+    "waterBath": "yes",
+    "relaxArea": "yes",
+    "comment": "",
+    "createdAt": "2026-04-15T07:18:07.812Z"
+  },
+  {
+    "id": 1776237611888,
+    "saunaId": "998",
+    "saunaName": "まほろばの湯 湯親館",
+    "saunaUrl": "https://sauna-ikitai.com/saunas/998",
+    "saunaImage": "https://img.sauna-ikitai.com/sauna/998_20211028_165901_FBSD98JvBS_medium.jpg",
+    "posterName": "ふくだ",
+    "saunaType": "dry",
+    "waterBath": "yes",
+    "relaxArea": "yes",
+    "comment": "温泉もゆっくり入れるのがおすすめ！",
+    "createdAt": "2026-04-15T07:20:11.888Z"
+  },
+  {
+    "id": 1776238542021,
+    "saunaId": "2147",
+    "saunaName": "RAKU SPA 鶴見",
+    "saunaUrl": "https://sauna-ikitai.com/saunas/2147",
+    "saunaImage": "https://img.sauna-ikitai.com/sauna/2147_20240629_011342_ameg07hbyo_medium.jpg",
+    "posterName": "内田",
+    "saunaType": "both",
+    "waterBath": "yes",
+    "relaxArea": "yes",
+    "comment": "漫画がいっぱい！岩盤浴もいっぱいあるよ！",
+    "createdAt": "2026-04-15T07:35:42.021Z"
+  },
+  {
+    "id": 1776238585054,
+    "saunaId": "4678",
+    "saunaName": "つくば温泉 喜楽里 別邸",
+    "saunaUrl": "https://sauna-ikitai.com/saunas/4678",
+    "saunaImage": "https://img.sauna-ikitai.com/sauna/4678_20180515_213526_YkNrLTCoe3_medium.jpg",
+    "posterName": "ナ",
+    "saunaType": null,
+    "waterBath": "yes",
+    "relaxArea": "yes",
+    "comment": "温泉だけど♩ごはんおいしいです",
+    "createdAt": "2026-04-15T07:36:25.054Z"
+  },
+  {
+    "id": 1776239068422,
+    "saunaId": "3777",
+    "saunaName": "伊都の湯どころ",
+    "saunaUrl": "https://sauna-ikitai.com/saunas/3777",
+    "saunaImage": "https://img.sauna-ikitai.com/sauna/3777_20240704_002235_RAnOmDkR6r_medium.jpg",
+    "posterName": "いぶちゃん",
+    "saunaType": "dry",
+    "waterBath": "yes",
+    "relaxArea": "yes",
+    "comment": "九州大学の近く！",
+    "createdAt": "2026-04-15T07:44:28.422Z"
+  },
+  {
+    "id": 1776239138094,
+    "saunaId": "2673",
+    "saunaName": "さがの温泉 天山の湯",
+    "saunaUrl": "https://sauna-ikitai.com/saunas/2673",
+    "saunaImage": "https://img.sauna-ikitai.com/sauna/2673_20171203_154127_00wrreiDYG_medium.jpg",
+    "posterName": "織田陽介",
+    "saunaType": "dry",
+    "waterBath": "yes",
+    "relaxArea": "yes",
+    "comment": "最近リニューアルされて綺麗になった。ロウリュウがやばい！",
+    "createdAt": "2026-04-15T07:45:38.094Z"
+  },
+  {
+    "id": 1776239812225,
+    "saunaId": "2218",
+    "saunaName": "おふろの王様 海老名店",
+    "saunaUrl": "https://sauna-ikitai.com/saunas/2218",
+    "saunaImage": "https://img.sauna-ikitai.com/sauna/2218_20181029_002636_7oUOt6Qn45_medium.jpg",
+    "posterName": "ふくだ",
+    "saunaType": "dry",
+    "waterBath": "yes",
+    "relaxArea": "yes",
+    "comment": "",
+    "createdAt": "2026-04-15T07:56:52.225Z"
+  }
+]

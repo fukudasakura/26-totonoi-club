@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>♨️26卒整い倶楽部🧖</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark:   #0058a8;
+      --green-mid:    #0078c8;
+      --green-light:  #40a8e0;
+      --green-pale:   #b8ddf5;
+      --green-mist:   #e8f5fc;
+      --stone:        #f0f8fd;
+      --white:        #ffffff;
+      --text-dark:    #0d2a40;
+      --text-mid:     #3a6480;
+      --text-light:   #7aafc8;
+      --shadow-green: rgba(0,88,168,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ===== 浮かぶ絵文字 ===== */
+    #emoji-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .float-emoji {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0;
+      animation: floatUp linear infinite;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(0)    translateX(0)            rotate(0deg);   opacity: 0;    }
+      10%  { opacity: 0.45; }
+      50%  { transform: translateY(-45vh) translateX(var(--sway))  rotate(var(--rot)); opacity: 0.35; }
+      90%  { opacity: 0.2; }
+      100% { transform: translateY(-100vh) translateX(calc(var(--sway) * 1.5)) rotate(calc(var(--rot) * 2)); opacity: 0; }
+    }
+
+    /* コンテンツを前面に */
+    header, main { position: relative; z-index: 1; }
+
+    @keyframes charFloat {
+      0%, 100% { transform: translateY(0px);   }
+      50%       { transform: translateY(-9px);  }
+    }
+
+    #wave-title span {
+      display: inline-block;
+      animation: charFloat 2.8s ease-in-out infinite;
+    }
+
+    @keyframes waveGradient {
+      0%   { background-position: 0% 50%; }
+      25%  { background-position: 50% 100%; }
+      50%  { background-position: 100% 50%; }
+      75%  { background-position: 50% 0%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body {
+      font-family: 'Noto Sans JP', 'ヒラギノ角ゴ Pro W3', 'メイリオ', sans-serif;
+      background: linear-gradient(
+        135deg,
+        #ffffff     0%,
+        #eaf5fc    20%,
+        #d4ecf8    40%,
+        #f0f8fd    60%,
+        #e0f0fa    80%,
+        #ffffff   100%
+      );
+      background-size: 300% 300%;
+      animation: waveGradient 12s ease infinite;
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ===== ヘッダー ===== */
+    header {
+      background: linear-gradient(135deg, #003d80 0%, var(--green-dark) 50%, #0090d8 100%);
+      color: white;
+      padding: 28px 20px 22px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    header h1 {
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      font-style: normal;
+      letter-spacing: 4px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    header p {
+      font-family: 'Noto Sans JP', 'ヒラギノ角ゴ Pro W3', 'メイリオ', sans-serif;
+      font-size: 13px;
+      margin-top: 8px;
+      opacity: 0.75;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+    }
+
+    /* ===== レイアウト ===== */
+    main { max-width: 960px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    /* ===== セクション共通 ===== */
+    .section-title {
+      font-family: 'Noto Sans JP', 'ヒラギノ角ゴ Pro W3', 'メイリオ', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 14px;
+      padding-left: 12px;
+      border-left: 3px solid var(--green-light);
+      letter-spacing: 1px;
+    }
+
+    /* ===== 検索エリア ===== */
+    #search-section {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 16px var(--shadow-green);
+      border: 1px solid var(--green-pale);
+    }
+    .search-bar { display: flex; gap: 10px; }
+    .search-bar input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1.5px solid var(--green-pale);
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      background: var(--green-mist);
+      color: var(--text-dark);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .search-bar input::placeholder { color: var(--text-light); }
+    .search-bar input:focus {
+      border-color: var(--green-light);
+      background: var(--white);
+    }
+    .search-bar button {
+      padding: 12px 24px;
+      background: var(--green-mid);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .search-bar button:hover  { background: var(--green-dark); }
+    .search-bar button:active { transform: scale(0.97); }
+
+    /* 検索結果グリッド */
+    #search-results {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .search-card {
+      border: 1.5px solid var(--green-pale);
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      background: var(--white);
+    }
+    .search-card:hover {
+      border-color: var(--green-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px var(--shadow-green);
+    }
+    .search-card.selected {
+      border-color: var(--green-mid);
+      box-shadow: 0 0 0 3px rgba(46,107,80,0.2);
+    }
+    .search-card img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      background: var(--green-mist);
+    }
+    .search-card-body { padding: 10px 12px 12px; }
+    .search-card-name {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 4px;
+      color: var(--text-dark);
+    }
+    .search-card-meta {
+      font-size: 11px;
+      color: var(--text-light);
+      display: flex;
+      gap: 8px;
+    }
+    .ikitai-badge {
+      background: var(--green-mist);
+      color: var(--green-mid);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 11px;
+    }
+
+    /* ローディング・エラー */
+    .search-status {
+      padding: 20px;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 14px;
+      grid-column: 1 / -1;
+    }
+    .search-status.error { color: #b04a3a; }
+
+    /* ===== 登録フォーム ===== */
+    #register-section {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 16px var(--shadow-green);
+      border: 1px solid var(--green-pale);
+      display: none;
+    }
+    #selected-sauna-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--green-mist);
+      border: 1px solid var(--green-pale);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+    #selected-sauna-preview img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: var(--green-pale);
+    }
+    #selected-sauna-preview .preview-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+    #selected-sauna-preview .preview-link {
+      font-size: 12px;
+      color: var(--green-mid);
+      text-decoration: none;
+    }
+    #selected-sauna-preview .preview-link:hover { text-decoration: underline; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 500px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-field label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-mid);
+      margin-bottom: 5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--green-pale);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      background: var(--green-mist);
+      color: var(--text-dark);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: var(--green-light);
+      background: var(--white);
+    }
+    .form-field textarea { resize: vertical; min-height: 70px; }
+    .form-field.full-width { grid-column: 1 / -1; }
+
+    #register-form button[type="submit"] {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--green-dark), var(--green-mid) 60%, var(--green-light));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    #register-form button[type="submit"]:hover  { opacity: 0.88; }
+    #register-form button[type="submit"]:active { transform: scale(0.98); }
+
+    /* ===== おすすめ一覧 ===== */
+    #recommendations-section {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 2px 16px var(--shadow-green);
+      border: 1px solid var(--green-pale);
+    }
+    #rec-count {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-left: 8px;
+      font-weight: 400;
+    }
+    #recommendations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 22px;
+      margin-top: 16px;
+    }
+
+    /* おすすめカード */
+    .rec-card {
+      position: relative;
+      border: 1px solid var(--green-pale);
+      border-radius: 16px;
+      overflow: visible;
+      background: var(--white);
+      box-shadow: 0 2px 12px var(--shadow-green);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .rec-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px var(--shadow-green);
+    }
+
+    /* 吹き出し */
+    .speech-bubble {
+      position: absolute;
+      top: -14px;
+      right: 12px;
+      background: var(--green-mid);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 20px;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(30,64,53,0.35);
+      z-index: 1;
+      letter-spacing: 0.5px;
+    }
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      right: 14px;
+      border: 7px solid transparent;
+      border-top-color: var(--green-mid);
+      border-bottom: none;
+    }
+
+    .rec-card-img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #b8d8c0, #8fbeaa);
+      border-radius: 16px 16px 0 0;
+      overflow: hidden;
+      display: block;
+    }
+    .rec-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .rec-card-img .no-img {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+
+    .rec-card-body { padding: 14px 16px 16px; }
+    .rec-card-name {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-dark);
+    }
+    .rec-card-name a {
+      color: var(--text-dark);
+      text-decoration: none;
+    }
+    .rec-card-name a:hover { color: var(--green-mid); }
+
+    .rec-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .tag {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .tag-dry   { background: #fdf3e3; color: #a0622a; }
+    .tag-mist  { background: #e4f0f6; color: #2a6a8a; }
+    .tag-water { background: #e0eef5; color: #1e5a78; }
+    .tag-relax { background: var(--green-mist); color: var(--green-mid); }
+    .tag-no    { background: #f2f2f2; color: #aaa; }
+
+    .rec-comment {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.7;
+      background: var(--green-mist);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+    }
+
+    .rec-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .rec-date { font-size: 11px; color: var(--text-light); }
+    .rec-delete-btn {
+      background: none;
+      border: none;
+      color: var(--green-pale);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .rec-delete-btn:hover { color: #b04a3a; }
+
+    .ikitai-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      background: var(--green-mist);
+      color: var(--green-mid);
+      border: 1.5px solid var(--green-pale);
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
+      letter-spacing: 0.5px;
+    }
+    .ikitai-btn:hover {
+      background: var(--green-mid);
+      color: white;
+      border-color: var(--green-mid);
+      transform: scale(1.04);
+    }
+    .ikitai-btn:active { transform: scale(0.97); }
+
+    /* 空状態 */
+    #empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-light);
+      grid-column: 1 / -1;
+    }
+    #empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    #empty-state p { font-size: 14px; line-height: 1.8; }
+
+    /* トースト通知 */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--green-dark);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 14px;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      pointer-events: none;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 id="wave-title">♨️26卒整い倶楽部🧖</h1>
+  <p>極上の整い体験を共有して、交感神経と副交感神経整えていこう！</p>
+</header>
+
+<main>
+
+  <!-- 検索セクション -->
+  <section id="search-section">
+    <div class="section-title">サウナを検索</div>
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="施設名を入力（例：渋谷サウナ、スパラクーア...）" />
+      <button id="search-btn">検索</button>
+    </div>
+    <div id="search-results"></div>
+  </section>
+
+  <!-- 登録フォーム -->
+  <section id="register-section">
+    <div class="section-title">おすすめを登録</div>
+    <div id="selected-sauna-preview"></div>
+    <form id="register-form">
+      <input type="hidden" id="f-sauna-id" />
+      <input type="hidden" id="f-sauna-name" />
+      <input type="hidden" id="f-sauna-url" />
+      <input type="hidden" id="f-sauna-image" />
+      <div class="form-grid">
+        <div class="form-field">
+          <label>あなたの名前 *</label>
+          <input type="text" id="f-poster" placeholder="例：福田" required />
+        </div>
+        <div class="form-field">
+          <label>サウナ種別</label>
+          <select id="f-type">
+            <option value="">-- 選択してください --</option>
+            <option value="dry">ドライサウナ</option>
+            <option value="mist">ミストサウナ</option>
+            <option value="both">両方あり</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>水風呂</label>
+          <select id="f-water">
+            <option value="">-- 選択してください --</option>
+            <option value="yes">あり</option>
+            <option value="no">なし</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>整うスペース</label>
+          <select id="f-relax">
+            <option value="">-- 選択してください --</option>
+            <option value="yes">あり</option>
+            <option value="no">なし</option>
+          </select>
+        </div>
+        <div class="form-field full-width">
+          <label>ひとことコメント</label>
+          <textarea id="f-comment" placeholder="おすすめポイントを教えてください！"></textarea>
+        </div>
+      </div>
+      <button type="submit">登録する！</button>
+    </form>
+  </section>
+
+  <!-- おすすめ一覧 -->
+  <section id="recommendations-section">
+    <div class="section-title">
+      みんなのおすすめ
+      <span id="rec-count"></span>
+    </div>
+    <div id="recommendations-grid">
+      <div id="empty-state">
+        <div class="empty-icon">🧖</div>
+        <p>まだおすすめがありません。<br>最初の1件を登録してみよう！</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+  const API = '';  // 同じホスト
+
+  let selectedSauna = null;
+
+  // ===== ユーティリティ =====
+  function showToast(msg, duration = 3000) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration);
+  }
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  // ===== 検索 =====
+  document.getElementById('search-btn').addEventListener('click', doSearch);
+  document.getElementById('search-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+
+  async function doSearch() {
+    const keyword = document.getElementById('search-input').value.trim();
+    if (!keyword) { showToast('施設名を入力してください'); return; }
+
+    const resultsEl = document.getElementById('search-results');
+    resultsEl.innerHTML = '<div class="search-status">検索中...</div>';
+
+    try {
+      const res = await fetch(`/api/search?keyword=${encodeURIComponent(keyword)}`);
+      const data = await res.json();
+
+      if (data.error) {
+        resultsEl.innerHTML = `<div class="search-status error">${data.error}</div>`;
+        return;
+      }
+      if (!data.length) {
+        resultsEl.innerHTML = '<div class="search-status">施設が見つかりませんでした。別のキーワードを試してみてください。</div>';
+        return;
+      }
+
+      resultsEl.innerHTML = data.map(s => `
+        <div class="search-card" data-id="${s.id}" onclick="selectSauna(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+          <img src="${s.image || ''}" alt="${s.name}"
+            onerror="this.style.display='none'"
+            style="${s.image ? '' : 'display:none'}">
+          <div class="search-card-body">
+            <div class="search-card-name">${s.name}</div>
+            <div class="search-card-meta">
+              ${s.area ? `<span>${s.area}</span>` : ''}
+              ${s.ikitai ? `<span class="ikitai-badge">イキタイ ${s.ikitai}</span>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } catch {
+      resultsEl.innerHTML = '<div class="search-status error">通信エラーが発生しました。</div>';
+    }
+  }
+
+  // ===== 施設選択 =====
+  function selectSauna(sauna) {
+    selectedSauna = sauna;
+
+    // 選択中のカードをハイライト
+    document.querySelectorAll('.search-card').forEach(c => c.classList.remove('selected'));
+    const card = document.querySelector(`.search-card[data-id="${sauna.id}"]`);
+    if (card) card.classList.add('selected');
+
+    // フォームのhidden値をセット
+    document.getElementById('f-sauna-id').value    = sauna.id || '';
+    document.getElementById('f-sauna-name').value  = sauna.name;
+    document.getElementById('f-sauna-url').value   = sauna.url || '';
+    document.getElementById('f-sauna-image').value = sauna.image || '';
+
+    // プレビュー
+    document.getElementById('selected-sauna-preview').innerHTML = `
+      ${sauna.image
+        ? `<img src="${sauna.image}" alt="${sauna.name}" onerror="this.style.display='none'">`
+        : ''}
+      <div>
+        <div class="preview-name">${sauna.name}</div>
+        ${sauna.url ? `<a class="preview-link" href="${sauna.url}" target="_blank">サウナ行きたいで見る →</a>` : ''}
+      </div>
+    `;
+
+    const sec = document.getElementById('register-section');
+    sec.style.display = 'block';
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ===== 登録 =====
+  document.getElementById('register-form').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const posterName = document.getElementById('f-poster').value.trim();
+    if (!posterName) { showToast('名前を入力してください'); return; }
+    if (!selectedSauna) { showToast('施設を選択してください'); return; }
+
+    const payload = {
+      saunaId:    document.getElementById('f-sauna-id').value,
+      saunaName:  document.getElementById('f-sauna-name').value,
+      saunaUrl:   document.getElementById('f-sauna-url').value,
+      saunaImage: document.getElementById('f-sauna-image').value,
+      posterName,
+      saunaType:  document.getElementById('f-type').value,
+      waterBath:  document.getElementById('f-water').value,
+      relaxArea:  document.getElementById('f-relax').value,
+      comment:    document.getElementById('f-comment').value.trim(),
+    };
+
+    try {
+      const res = await fetch('/api/recommendations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.error) { showToast(data.error); return; }
+
+      showToast('登録しました！');
+      e.target.reset();
+      document.getElementById('register-section').style.display = 'none';
+      document.querySelectorAll('.search-card').forEach(c => c.classList.remove('selected'));
+      selectedSauna = null;
+      loadRecommendations();
+    } catch {
+      showToast('登録に失敗しました');
+    }
+  });
+
+  // ===== 一覧読み込み =====
+  async function loadRecommendations() {
+    try {
+      const res  = await fetch('/api/recommendations');
+      const data = await res.json();
+      renderRecommendations(data);
+    } catch {
+      console.error('一覧の読み込みに失敗しました');
+    }
+  }
+
+  function renderRecommendations(list) {
+    const grid   = document.getElementById('recommendations-grid');
+    const count  = document.getElementById('rec-count');
+    count.textContent = list.length ? `（${list.length}件）` : '';
+
+    if (!list.length) {
+      grid.innerHTML = `
+        <div id="empty-state">
+          <div class="empty-icon">🧖</div>
+          <p>まだおすすめがありません。<br>最初の1件を登録してみよう！</p>
+        </div>`;
+      return;
+    }
+
+    const typeLabel  = { dry: 'ドライサウナ', mist: 'ミストサウナ', both: 'ドライ＆ミスト' };
+    const typeClass  = { dry: 'tag-dry',       mist: 'tag-mist',      both: 'tag-dry'       };
+
+    grid.innerHTML = list.map(r => `
+      <div class="rec-card">
+        <div class="speech-bubble">${escHtml(r.posterName)} からのおすすめ！</div>
+
+        <div class="rec-card-img">
+          ${r.saunaImage
+            ? `<img src="${r.saunaImage}" alt="${escHtml(r.saunaName)}"
+                    onerror="this.parentElement.innerHTML='<div class=no-img>🧖</div>'">`
+            : '<div class="no-img">🧖</div>'}
+        </div>
+
+        <div class="rec-card-body">
+          <div class="rec-card-name">
+            ${r.saunaUrl
+              ? `<a href="${r.saunaUrl}" target="_blank">${escHtml(r.saunaName)}</a>`
+              : escHtml(r.saunaName)}
+          </div>
+
+          <div class="rec-tags">
+            ${r.saunaType ? `<span class="tag ${typeClass[r.saunaType] || 'tag-dry'}">${typeLabel[r.saunaType] || r.saunaType}</span>` : ''}
+            ${r.waterBath === 'yes'  ? '<span class="tag tag-water">水風呂あり</span>'   : ''}
+            ${r.waterBath === 'no'   ? '<span class="tag tag-no">水風呂なし</span>'     : ''}
+            ${r.relaxArea === 'yes'  ? '<span class="tag tag-relax">整うスペースあり</span>' : ''}
+            ${r.relaxArea === 'no'   ? '<span class="tag tag-no">整うスペースなし</span>'   : ''}
+          </div>
+
+          ${r.comment ? `<div class="rec-comment">"${escHtml(r.comment)}"</div>` : ''}
+
+          ${r.saunaUrl
+            ? `<a class="ikitai-btn" href="${r.saunaUrl}" target="_blank">♨ 行きたい！</a>`
+            : ''}
+
+          <div class="rec-card-footer">
+            <span class="rec-date">${formatDate(r.createdAt)}</span>
+            <button class="rec-delete-btn" onclick="deleteRec(${r.id})" title="削除">×</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ===== 削除 =====
+  async function deleteRec(id) {
+    if (!confirm('このおすすめを削除しますか？')) return;
+    try {
+      await fetch(`/api/recommendations/${id}`, { method: 'DELETE' });
+      showToast('削除しました');
+      loadRecommendations();
+    } catch {
+      showToast('削除に失敗しました');
+    }
+  }
+
+  // ===== XSS防止 =====
+  function escHtml(str) {
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // ===== 浮かぶ絵文字 =====
+  const emojiContainer = document.createElement('div');
+  emojiContainer.id = 'emoji-container';
+  document.body.prepend(emojiContainer);
+
+  const emojis = ['♨️', '🌿', '🫧', '🥤'];
+
+  for (let i = 0; i < 24; i++) {
+    const el    = document.createElement('div');
+    el.className = 'float-emoji';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    const size  = 18 + Math.random() * 22;
+    const left  = Math.random() * 100;
+    const delay = Math.random() * 14;
+    const dur   = 10 + Math.random() * 10;
+    const sway  = (Math.random() - 0.5) * 100;
+    const rot   = (Math.random() - 0.5) * 30;
+    el.style.cssText = `
+      font-size: ${size}px;
+      left: ${left}%;
+      bottom: -60px;
+      animation-delay: ${delay}s;
+      animation-duration: ${dur}s;
+      --sway: ${sway}px;
+      --rot: ${rot}deg;
+    `;
+    emojiContainer.appendChild(el);
+  }
+
+  // ===== タイトル波アニメーション =====
+  const titleEl = document.getElementById('wave-title');
+  titleEl.innerHTML = [...titleEl.textContent].map((char, i) =>
+    `<span style="animation-delay: ${(i * 0.12).toFixed(2)}s">${char}</span>`
+  ).join('');
+
+  // ===== 初期読み込み =====
+  loadRecommendations();
+</script>
+
+</body>
+</html>
