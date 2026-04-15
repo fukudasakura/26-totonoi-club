@@ -11,7 +11,14 @@ const DATA_FILE = path.join(__dirname, 'data', 'saunas.json');
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// どのURLでもindex.htmlを返す
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  }
+});
 
 // ---- サウナ行きたいを検索 ----
 app.get('/api/search', async (req, res) => {
