@@ -13,6 +13,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ルートを明示的に返す
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // ---- サウナ行きたいを検索 ----
 app.get('/api/search', async (req, res) => {
   try {
