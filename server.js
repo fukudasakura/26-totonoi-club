@@ -13,13 +13,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// どのURLでもindex.htmlを返す
-app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  }
-});
-
 // ---- サウナ行きたいを検索 ----
 app.get('/api/search', async (req, res) => {
   try {
@@ -149,6 +142,11 @@ app.delete('/api/recommendations/:id', (req, res) => {
   } catch {
     res.status(500).json({ error: '削除に失敗しました' });
   }
+});
+
+// ---- どのURLでもindex.htmlを返す（APIより後に置く！）----
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
