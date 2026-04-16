@@ -1082,6 +1082,7 @@
         <input type="hidden" id="f-sauna-name" />
         <input type="hidden" id="f-sauna-url" />
         <input type="hidden" id="f-sauna-image" />
+        <input type="hidden" id="f-sauna-area" />
         <div class="form-grid">
           <div class="form-field">
             <label>あなたの名前 *</label>
@@ -1157,6 +1158,7 @@
         <input type="hidden" id="vf-sauna-name" />
         <input type="hidden" id="vf-sauna-url" />
         <input type="hidden" id="vf-sauna-image" />
+        <input type="hidden" id="vf-sauna-area" />
         <div class="form-grid">
           <div class="form-field">
             <label>あなたの名前 *</label>
@@ -1318,6 +1320,7 @@
     document.getElementById('f-sauna-name').value  = sauna.name;
     document.getElementById('f-sauna-url').value   = sauna.url || '';
     document.getElementById('f-sauna-image').value = sauna.image || '';
+    document.getElementById('f-sauna-area').value  = sauna.area || '';
 
     // プレビュー
     document.getElementById('selected-sauna-preview').innerHTML = `
@@ -1348,6 +1351,7 @@
       saunaName:  document.getElementById('f-sauna-name').value,
       saunaUrl:   document.getElementById('f-sauna-url').value,
       saunaImage: document.getElementById('f-sauna-image').value,
+      saunaArea:  document.getElementById('f-sauna-area').value,
       posterName,
       saunaType:  document.getElementById('f-type').value,
       waterBath:  document.getElementById('f-water').value,
@@ -1420,6 +1424,7 @@
               ? `<a href="${r.saunaUrl}" target="_blank">${escHtml(r.saunaName)}</a>`
               : escHtml(r.saunaName)}
           </div>
+          ${r.saunaArea ? `<div style="font-size:12px;color:var(--text-light);margin-bottom:8px;">📍 ${escHtml(r.saunaArea)}</div>` : ''}
 
           <div class="rec-tags">
             ${r.saunaType ? `<span class="tag ${typeClass[r.saunaType] || 'tag-dry'}">${typeLabel[r.saunaType] || r.saunaType}</span>` : ''}
@@ -1549,6 +1554,7 @@
     document.getElementById('vf-sauna-name').value  = sauna.name;
     document.getElementById('vf-sauna-url').value   = sauna.url || '';
     document.getElementById('vf-sauna-image').value = sauna.image || '';
+    document.getElementById('vf-sauna-area').value  = sauna.area || '';
 
     document.getElementById('visit-selected-preview').innerHTML = `
       ${sauna.image
@@ -1617,6 +1623,7 @@
       saunaName:    document.getElementById('vf-sauna-name').value,
       saunaUrl:     document.getElementById('vf-sauna-url').value,
       saunaImage:   document.getElementById('vf-sauna-image').value,
+      saunaArea:    document.getElementById('vf-sauna-area').value,
       visitorName,
       visitDate,
       timeOfDay:    document.getElementById('vf-time').value,
@@ -1708,6 +1715,7 @@
                 ? `<a href="${v.saunaUrl}" target="_blank">${escHtml(v.saunaName)}</a>`
                 : escHtml(v.saunaName)}
             </div>
+            ${v.saunaArea ? `<div style="font-size:12px;color:var(--text-light);margin-bottom:8px;">📍 ${escHtml(v.saunaArea)}</div>` : ''}
 
             <div class="visit-stats">
               ${v.timeOfDay ? `<span class="visit-stat stat-time">${timeIcons[v.timeOfDay] || ''} ${v.timeOfDay}</span>` : ''}

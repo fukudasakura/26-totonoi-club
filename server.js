@@ -89,6 +89,7 @@ app.get('/api/recommendations', async (_, res) => {
       saunaName: r.sauna_name,
       saunaUrl: r.sauna_url,
       saunaImage: r.sauna_image,
+      saunaArea: r.sauna_area,
       posterName: r.poster_name,
       saunaType: r.sauna_type,
       waterBath: r.water_bath,
@@ -106,7 +107,7 @@ app.get('/api/recommendations', async (_, res) => {
 // ---- おすすめ登録 ----
 app.post('/api/recommendations', async (req, res) => {
   try {
-    const { saunaId, saunaName, saunaUrl, saunaImage, posterName, saunaType, waterBath, relaxArea, comment } = req.body;
+    const { saunaId, saunaName, saunaUrl, saunaImage, saunaArea, posterName, saunaType, waterBath, relaxArea, comment } = req.body;
 
     if (!saunaName || !posterName) {
       return res.status(400).json({ error: '施設名と投稿者名は必須です' });
@@ -119,6 +120,7 @@ app.post('/api/recommendations', async (req, res) => {
         sauna_name: saunaName,
         sauna_url: saunaUrl || null,
         sauna_image: saunaImage || null,
+        sauna_area: saunaArea || null,
         poster_name: posterName,
         sauna_type: saunaType || null,
         water_bath: waterBath || null,
@@ -135,6 +137,7 @@ app.post('/api/recommendations', async (req, res) => {
       saunaName: r.sauna_name,
       saunaUrl: r.sauna_url,
       saunaImage: r.sauna_image,
+      saunaArea: r.sauna_area,
       posterName: r.poster_name,
       saunaType: r.sauna_type,
       waterBath: r.water_bath,
@@ -176,6 +179,7 @@ app.get('/api/visits', async (_, res) => {
       saunaName: r.sauna_name,
       saunaUrl: r.sauna_url,
       saunaImage: r.sauna_image,
+      saunaArea: r.sauna_area,
       visitorName: r.visitor_name,
       visitDate: r.visit_date,
       timeOfDay: r.time_of_day,
@@ -198,7 +202,7 @@ app.get('/api/visits', async (_, res) => {
 app.post('/api/visits', async (req, res) => {
   try {
     const {
-      saunaId, saunaName, saunaUrl, saunaImage,
+      saunaId, saunaName, saunaUrl, saunaImage, saunaArea,
       visitorName, visitDate, timeOfDay, crowdedness,
       saunaTemp, waterTemp, outdoorSpace, amenities, comment
     } = req.body;
@@ -214,6 +218,7 @@ app.post('/api/visits', async (req, res) => {
         sauna_name: saunaName,
         sauna_url: saunaUrl || null,
         sauna_image: saunaImage || null,
+        sauna_area: saunaArea || null,
         visitor_name: visitorName,
         visit_date: visitDate,
         time_of_day: timeOfDay || null,
@@ -234,6 +239,7 @@ app.post('/api/visits', async (req, res) => {
       saunaName: r.sauna_name,
       saunaUrl: r.sauna_url,
       saunaImage: r.sauna_image,
+      saunaArea: r.sauna_area,
       visitorName: r.visitor_name,
       visitDate: r.visit_date,
       timeOfDay: r.time_of_day,
