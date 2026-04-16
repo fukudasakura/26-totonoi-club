@@ -9,17 +9,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --green-dark:   #0058a8;
-      --green-mid:    #0078c8;
-      --green-light:  #40a8e0;
-      --green-pale:   #b8ddf5;
-      --green-mist:   #e8f5fc;
-      --stone:        #f0f8fd;
+      --green-dark:   #c96b62;
+      --green-mid:    #e88a7c;
+      --green-light:  #f0a89e;
+      --green-pale:   #f5d5cf;
+      --green-mist:   #fdf0ed;
+      --stone:        #f8f4ef;
       --white:        #ffffff;
-      --text-dark:    #0d2a40;
-      --text-mid:     #3a6480;
-      --text-light:   #7aafc8;
-      --shadow-green: rgba(0,88,168,0.12);
+      --text-dark:    #3a2828;
+      --text-mid:     #8a6560;
+      --text-light:   #c8a098;
+      --shadow-green: rgba(232,138,124,0.12);
+      --accent-blue:  #7bc8d8;
+      --accent-blue-light: #d4eef3;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -75,10 +77,11 @@
       background: linear-gradient(
         135deg,
         #ffffff     0%,
-        #eaf5fc    20%,
-        #d4ecf8    40%,
-        #f0f8fd    60%,
-        #e0f0fa    80%,
+        #fdf0ed    20%,
+        #f5e8e4    40%,
+        #f8f4ef    50%,
+        #e8f3f6    70%,
+        #d4eef3    85%,
         #ffffff   100%
       );
       background-size: 300% 300%;
@@ -89,11 +92,11 @@
 
     /* ===== ヘッダー ===== */
     header {
-      background: linear-gradient(135deg, #003d80 0%, var(--green-dark) 50%, #0090d8 100%);
+      background: linear-gradient(135deg, #c96b62 0%, #e88a7c 40%, #7bc8d8 100%);
       color: white;
       padding: 28px 20px 22px;
       text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      box-shadow: 0 4px 20px rgba(201,107,98,0.3);
     }
     header h1 {
       font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
@@ -123,7 +126,7 @@
       color: var(--green-dark);
       margin-bottom: 14px;
       padding-left: 12px;
-      border-left: 3px solid var(--green-light);
+      border-left: 3px solid var(--accent-blue);
       letter-spacing: 1px;
     }
 
@@ -193,7 +196,7 @@
     }
     .search-card.selected {
       border-color: var(--green-mid);
-      box-shadow: 0 0 0 3px rgba(46,107,80,0.2);
+      box-shadow: 0 0 0 3px rgba(232,138,124,0.25);
     }
     .search-card img {
       width: 100%;
@@ -375,7 +378,7 @@
       padding: 5px 11px;
       border-radius: 20px;
       white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(30,64,53,0.35);
+      box-shadow: 0 2px 8px rgba(201,107,98,0.35);
       z-index: 1;
       letter-spacing: 0.5px;
     }
@@ -393,7 +396,7 @@
       width: 100%;
       height: 140px;
       object-fit: cover;
-      background: linear-gradient(135deg, #b8d8c0, #8fbeaa);
+      background: linear-gradient(135deg, #f5d5cf, #d4eef3);
       border-radius: 16px 16px 0 0;
       overflow: hidden;
       display: block;
@@ -438,11 +441,11 @@
       font-weight: 700;
       letter-spacing: 0.3px;
     }
-    .tag-dry   { background: #fdf3e3; color: #a0622a; }
-    .tag-mist  { background: #e4f0f6; color: #2a6a8a; }
-    .tag-water { background: #e0eef5; color: #1e5a78; }
+    .tag-dry   { background: #fdf0ed; color: #c96b62; }
+    .tag-mist  { background: #d4eef3; color: #4a9aaa; }
+    .tag-water { background: #d4eef3; color: #4a9aaa; }
     .tag-relax { background: var(--green-mist); color: var(--green-mid); }
-    .tag-no    { background: #f2f2f2; color: #aaa; }
+    .tag-no    { background: #f2eeec; color: #bba8a4; }
 
     .rec-comment {
       font-size: 13px;
@@ -471,7 +474,7 @@
       line-height: 1;
       transition: color 0.2s;
     }
-    .rec-delete-btn:hover { color: #b04a3a; }
+    .rec-delete-btn:hover { color: #c94a3a; }
 
     .ikitai-btn {
       display: inline-flex;
@@ -514,7 +517,7 @@
       bottom: 30px;
       left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: var(--green-dark);
+      background: linear-gradient(135deg, #c96b62, #e88a7c);
       color: white;
       padding: 12px 24px;
       border-radius: 30px;
@@ -525,166 +528,339 @@
     }
     #toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* ===== 暖簾スクリーン ===== */
+    /* ===== 暖簾スクリーン（レトロ銭湯風） ===== */
     #noren-screen {
       position: fixed;
       inset: 0;
       z-index: 9999;
       display: flex;
       overflow: hidden;
+      background: #f8f4ef;
     }
     #noren-screen.fade-out {
       opacity: 0;
       transition: opacity 0.5s ease;
       pointer-events: none;
     }
+    /* 上部装飾ボーダー */
     #noren-rod {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 22px;
-      background: linear-gradient(180deg, #a07820 0%, #d4a835 40%, #e8c050 60%, #b08828 100%);
-      z-index: 3;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,220,0.3);
+      top: 0; left: 0; right: 0;
+      height: 48px;
+      background: #f8f4ef;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      border-bottom: 3px solid #7bc8d8;
     }
+    #noren-rod::before,
+    #noren-rod::after {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      width: 60%;
+      height: 3px;
+      background: repeating-linear-gradient(90deg,
+        #7bc8d8 0px, #7bc8d8 8px, transparent 8px, transparent 14px);
+    }
+    #noren-rod::before { bottom: -13px; }
+    #noren-rod::after  { bottom: -7px; }
+    /* 蛇口アイコン */
+    .noren-faucet {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .noren-faucet.cold { color: #7bc8d8; }
+    .noren-faucet.hot  { color: #e88a7c; }
+    .noren-faucet-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .noren-top-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: #e88a7c;
+      letter-spacing: 6px;
+      text-align: center;
+    }
+    .noren-top-title .yu-mark {
+      display: inline-block;
+      width: 22px; height: 22px;
+      background: #e88a7c;
+      color: #f8f4ef;
+      border-radius: 50%;
+      font-size: 12px;
+      line-height: 22px;
+      text-align: center;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 700;
+      margin: 0 4px;
+      vertical-align: middle;
+    }
+    /* パネル共通 */
     .noren-panel {
       position: relative;
       width: 50%;
       height: 100%;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
+      padding-top: 80px;
       transition: transform 0.95s cubic-bezier(0.77, 0, 0.18, 1);
       overflow: hidden;
+      z-index: 1;
+      background: #f8f4ef;
     }
-    #noren-left {
-      background: linear-gradient(165deg, #1c3568 0%, #102248 55%, #0a1830 100%);
-      border-right: 1px solid rgba(255,255,255,0.08);
-    }
-    #noren-right {
-      background: linear-gradient(195deg, #1c3568 0%, #102248 55%, #0a1830 100%);
-      border-left: 1px solid rgba(255,255,255,0.08);
-    }
-    #noren-left.slide-out  { transform: translateX(-100%); }
-    #noren-right.slide-out { transform: translateX(100%);  }
-    .noren-stripes {
+    /* 格子柄オーバーレイ */
+    .noren-grid-overlay {
       position: absolute;
-      inset: 0;
-      display: flex;
-      justify-content: space-evenly;
+      top: 56px;
+      width: 80px;
+      bottom: 40%;
+      background:
+        repeating-linear-gradient(0deg,
+          transparent 0px, transparent 6px,
+          #7bc8d8 6px, #7bc8d8 7px),
+        repeating-linear-gradient(90deg,
+          transparent 0px, transparent 6px,
+          #7bc8d8 6px, #7bc8d8 7px);
+      opacity: 0.35;
       pointer-events: none;
     }
-    .noren-stripes span {
-      width: 1px;
-      background: linear-gradient(180deg,
-        transparent 0%,
-        rgba(255,255,255,0.05) 15%,
-        rgba(255,255,255,0.07) 50%,
-        rgba(255,255,255,0.05) 85%,
-        transparent 100%);
+    #noren-left .noren-grid-overlay { left: 12px; }
+    #noren-right .noren-grid-overlay { right: 12px; }
+    /* 左パネル装飾 */
+    #noren-left {
+      border-right: 2px dashed rgba(123,200,216,0.3);
     }
+    #noren-right {
+      border-left: 2px dashed rgba(123,200,216,0.3);
+    }
+    /* スライドアニメーション */
+    #noren-left.slide-out  { transform: translateX(-103%); }
+    #noren-right.slide-out { transform: translateX(103%);  }
+    /* コンテンツ */
     .noren-content {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 14px;
     }
-    .noren-emoji {
-      font-size: 52px;
-      filter: drop-shadow(0 0 16px rgba(200,230,255,0.5));
-      animation: noren-glow 3s ease-in-out infinite alternate;
+    /* 家紋（「ゆ」マーク） */
+    .noren-mon {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 3px solid #e88a7c;
+      background: #f8f4ef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      font-family: 'Noto Sans JP', serif;
+      font-weight: 700;
+      color: #e88a7c;
+      box-shadow: 0 0 0 6px rgba(232,138,124,0.12);
     }
-    @keyframes noren-glow {
-      from { filter: drop-shadow(0 0 8px rgba(200,230,255,0.3)); }
-      to   { filter: drop-shadow(0 0 20px rgba(200,230,255,0.7)); }
+    /* 区切り線 */
+    .noren-divider {
+      width: 50px; height: 2px;
+      background: linear-gradient(90deg, transparent, #e88a7c, transparent);
     }
+    /* 縦書きテキスト */
     .noren-vtext {
       writing-mode: vertical-rl;
       text-orientation: mixed;
-      font-family: 'Noto Sans JP', serif;
-      font-size: 40px;
+      font-family: 'Noto Sans JP', 'ヒラギノ角ゴ Pro W3', serif;
+      font-size: 42px;
       font-weight: 700;
-      color: #e8dfc0;
-      letter-spacing: 10px;
-      text-shadow: 0 2px 16px rgba(0,0,0,0.9), 0 0 40px rgba(120,170,255,0.25);
+      color: #e88a7c;
+      letter-spacing: 12px;
+      text-shadow: 2px 2px 0 rgba(232,138,124,0.15);
     }
+    /* サイド縦書き小文字 */
+    .noren-side-text {
+      position: absolute;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-family: 'Noto Sans JP', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #7bc8d8;
+      letter-spacing: 6px;
+      top: 90px;
+    }
+    #noren-left .noren-side-text  { right: 20px; }
+    #noren-right .noren-side-text { left: 20px; }
+    /* 波模様（下部） */
+    .noren-wave {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 120px;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .noren-wave svg {
+      position: absolute;
+      bottom: 0;
+      width: 200%;
+      height: 100%;
+    }
+    .noren-wave .wave-back {
+      animation: waveMove 6s ease-in-out infinite;
+    }
+    .noren-wave .wave-front {
+      animation: waveMove 4s ease-in-out infinite reverse;
+    }
+    @keyframes waveMove {
+      0%, 100% { transform: translateX(0); }
+      50%      { transform: translateX(-25%); }
+    }
+    /* 入店ボタン＋サブテキストまとめ */
     #noren-btn-wrap {
       position: absolute;
-      bottom: 14%;
+      bottom: 12%;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 4;
+      z-index: 20;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 14px;
+    }
+    .noren-subtitle {
+      text-align: center;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 12px;
+      color: #e88a7c;
+      letter-spacing: 4px;
+      white-space: nowrap;
+      opacity: 0.7;
     }
     #noren-btn {
-      width: 116px;
-      height: 116px;
+      width: 120px; height: 120px;
       border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.65);
-      background: rgba(255,255,255,0.07);
-      backdrop-filter: blur(10px);
+      border: 3px solid #e88a7c;
+      background: rgba(248,244,239,0.9);
+      backdrop-filter: blur(8px);
       cursor: pointer;
-      color: #f0e8d0;
+      color: #e88a7c;
       font-family: 'Noto Sans JP', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 15px;
+      font-weight: 700;
       line-height: 1.7;
-      transition: background 0.3s, border-color 0.3s, transform 0.3s;
-      animation: noren-pulse 2.8s ease-in-out infinite;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      animation: btn-pulse-sento 3s ease-in-out infinite;
+    }
+    #noren-btn::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 2px solid rgba(232,138,124,0.2);
+      animation: ring-spin 3s ease-in-out infinite;
+    }
+    @keyframes ring-spin {
+      0%, 100% { transform: scale(1);   opacity: 0.6; }
+      50%      { transform: scale(1.08); opacity: 0.15; }
     }
     #noren-btn:hover {
-      background: rgba(255,255,255,0.18);
-      border-color: white;
-      transform: scale(1.1);
+      background: #e88a7c;
+      color: #f8f4ef;
+      border-color: #e88a7c;
+      transform: scale(1.08);
+      box-shadow: 0 8px 30px rgba(232,138,124,0.35);
       animation: none;
     }
-    @keyframes noren-pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.25); }
-      50%       { box-shadow: 0 0 0 14px rgba(255,255,255,0); }
+    #noren-btn:hover::before { display: none; }
+    @keyframes btn-pulse-sento {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(232,138,124,0.2); }
+      50%      { box-shadow: 0 0 24px 4px rgba(232,138,124,0.1); }
     }
     .noren-hint {
-      color: rgba(255,255,255,0.35);
-      font-size: 11px;
-      letter-spacing: 1px;
+      color: rgba(123,200,216,0.6);
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 600;
     }
+    /* わ・ぬマーク */
+    .noren-kana {
+      position: absolute;
+      bottom: 25%;
+      font-family: 'Noto Sans JP', serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #7bc8d8;
+      opacity: 0.25;
+    }
+    #noren-left .noren-kana  { right: 16px; }
+    #noren-right .noren-kana { left: 16px; }
   </style>
 </head>
 <body>
 
-<!-- ===== 暖簾スクリーン ===== -->
+<!-- ===== 暖簾スクリーン（レトロ銭湯風） ===== -->
 <div id="noren-screen">
-  <div id="noren-rod"></div>
+  <!-- 上部装飾バー -->
+  <div id="noren-rod">
+    <span class="noren-faucet cold">
+      <span class="noren-faucet-icon">🚰</span>
+      <span>冷 COLD</span>
+    </span>
+    <span class="noren-top-title">TOTONOI <span class="yu-mark">ゆ</span> CLUB</span>
+    <span class="noren-faucet hot">
+      <span class="noren-faucet-icon">🚰</span>
+      <span>温 HOT</span>
+    </span>
+  </div>
 
   <!-- 左パネル -->
   <div class="noren-panel" id="noren-left">
-    <div class="noren-stripes">
-      <span></span><span></span><span></span>
-    </div>
+    <div class="noren-grid-overlay"></div>
     <div class="noren-content">
-      <div class="noren-emoji">♨️</div>
+      <div class="noren-mon">♨</div>
+      <div class="noren-divider"></div>
       <div class="noren-vtext">26卒整い</div>
     </div>
+    <div class="noren-side-text">汗と疲れを流してさっぱり</div>
+    <div class="noren-kana">わ</div>
   </div>
 
   <!-- 右パネル -->
   <div class="noren-panel" id="noren-right">
-    <div class="noren-stripes">
-      <span></span><span></span><span></span>
-    </div>
+    <div class="noren-grid-overlay"></div>
     <div class="noren-content">
+      <div class="noren-mon">ゆ</div>
+      <div class="noren-divider"></div>
       <div class="noren-vtext">倶楽部</div>
-      <div class="noren-emoji">🧖</div>
     </div>
+    <div class="noren-side-text">美容と健康の泉</div>
+    <div class="noren-kana">ぬ</div>
+  </div>
+
+  <!-- 波模様 -->
+  <div class="noren-wave">
+    <svg class="wave-back" viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z" fill="rgba(123,200,216,0.15)"/>
+    </svg>
+    <svg class="wave-front" viewBox="0 0 1440 120" preserveAspectRatio="none">
+      <path d="M0,80 C240,20 480,100 720,40 C960,100 1200,20 1440,80 L1440,120 L0,120 Z" fill="rgba(123,200,216,0.25)"/>
+    </svg>
   </div>
 
   <!-- 入店ボタン -->
   <div id="noren-btn-wrap">
+    <div class="noren-subtitle">極上の整い体験を共有しよう</div>
     <button id="noren-btn">のれんを<br>くぐる</button>
     <span class="noren-hint">tap to enter</span>
   </div>
