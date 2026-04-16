@@ -524,9 +524,171 @@
       pointer-events: none;
     }
     #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ===== 暖簾スクリーン ===== */
+    #noren-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      overflow: hidden;
+    }
+    #noren-screen.fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    #noren-rod {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 22px;
+      background: linear-gradient(180deg, #a07820 0%, #d4a835 40%, #e8c050 60%, #b08828 100%);
+      z-index: 3;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,220,0.3);
+    }
+    .noren-panel {
+      position: relative;
+      width: 50%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.95s cubic-bezier(0.77, 0, 0.18, 1);
+      overflow: hidden;
+    }
+    #noren-left {
+      background: linear-gradient(165deg, #1c3568 0%, #102248 55%, #0a1830 100%);
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    #noren-right {
+      background: linear-gradient(195deg, #1c3568 0%, #102248 55%, #0a1830 100%);
+      border-left: 1px solid rgba(255,255,255,0.08);
+    }
+    #noren-left.slide-out  { transform: translateX(-100%); }
+    #noren-right.slide-out { transform: translateX(100%);  }
+    .noren-stripes {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: space-evenly;
+      pointer-events: none;
+    }
+    .noren-stripes span {
+      width: 1px;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(255,255,255,0.05) 15%,
+        rgba(255,255,255,0.07) 50%,
+        rgba(255,255,255,0.05) 85%,
+        transparent 100%);
+    }
+    .noren-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .noren-emoji {
+      font-size: 52px;
+      filter: drop-shadow(0 0 16px rgba(200,230,255,0.5));
+      animation: noren-glow 3s ease-in-out infinite alternate;
+    }
+    @keyframes noren-glow {
+      from { filter: drop-shadow(0 0 8px rgba(200,230,255,0.3)); }
+      to   { filter: drop-shadow(0 0 20px rgba(200,230,255,0.7)); }
+    }
+    .noren-vtext {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-family: 'Noto Sans JP', serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: #e8dfc0;
+      letter-spacing: 10px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.9), 0 0 40px rgba(120,170,255,0.25);
+    }
+    #noren-btn-wrap {
+      position: absolute;
+      bottom: 14%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    #noren-btn {
+      width: 116px;
+      height: 116px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      color: #f0e8d0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.7;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
+      animation: noren-pulse 2.8s ease-in-out infinite;
+    }
+    #noren-btn:hover {
+      background: rgba(255,255,255,0.18);
+      border-color: white;
+      transform: scale(1.1);
+      animation: none;
+    }
+    @keyframes noren-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.25); }
+      50%       { box-shadow: 0 0 0 14px rgba(255,255,255,0); }
+    }
+    .noren-hint {
+      color: rgba(255,255,255,0.35);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
   </style>
 </head>
 <body>
+
+<!-- ===== 暖簾スクリーン ===== -->
+<div id="noren-screen">
+  <div id="noren-rod"></div>
+
+  <!-- 左パネル -->
+  <div class="noren-panel" id="noren-left">
+    <div class="noren-stripes">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="noren-content">
+      <div class="noren-emoji">♨️</div>
+      <div class="noren-vtext">26卒整い</div>
+    </div>
+  </div>
+
+  <!-- 右パネル -->
+  <div class="noren-panel" id="noren-right">
+    <div class="noren-stripes">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="noren-content">
+      <div class="noren-vtext">倶楽部</div>
+      <div class="noren-emoji">🧖</div>
+    </div>
+  </div>
+
+  <!-- 入店ボタン -->
+  <div id="noren-btn-wrap">
+    <button id="noren-btn">のれんを<br>くぐる</button>
+    <span class="noren-hint">tap to enter</span>
+  </div>
+</div>
 
 <header>
   <h1 id="wave-title">♨️26卒整い倶楽部🧖</h1>
@@ -836,6 +998,17 @@
       .replace(/'/g, '&#039;');
   }
 
+  // ===== 暖簾スクリーン =====
+  document.getElementById('noren-btn').addEventListener('click', () => {
+    document.getElementById('noren-left').classList.add('slide-out');
+    document.getElementById('noren-right').classList.add('slide-out');
+    setTimeout(() => {
+      const screen = document.getElementById('noren-screen');
+      screen.classList.add('fade-out');
+      setTimeout(() => screen.remove(), 500);
+    }, 750);
+  });
+
   // ===== 浮かぶ絵文字 =====
   const emojiContainer = document.createElement('div');
   emojiContainer.id = 'emoji-container';
@@ -873,6 +1046,7 @@
 
   // ===== 初期読み込み =====
   loadRecommendations();
+
 </script>
 
 </body>
