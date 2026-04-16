@@ -246,7 +246,8 @@
       border: 1px solid var(--green-pale);
       display: none;
     }
-    #selected-sauna-preview {
+    #selected-sauna-preview,
+    #visit-selected-preview {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -256,24 +257,28 @@
       padding: 12px;
       margin-bottom: 16px;
     }
-    #selected-sauna-preview img {
+    #selected-sauna-preview img,
+    #visit-selected-preview img {
       width: 60px;
       height: 60px;
       object-fit: cover;
       border-radius: 8px;
       background: var(--green-pale);
     }
-    #selected-sauna-preview .preview-name {
+    #selected-sauna-preview .preview-name,
+    #visit-selected-preview .preview-name {
       font-size: 15px;
       font-weight: 700;
       color: var(--text-dark);
     }
-    #selected-sauna-preview .preview-link {
+    #selected-sauna-preview .preview-link,
+    #visit-selected-preview .preview-link {
       font-size: 12px;
       color: var(--green-mid);
       text-decoration: none;
     }
-    #selected-sauna-preview .preview-link:hover { text-decoration: underline; }
+    #selected-sauna-preview .preview-link:hover,
+    #visit-selected-preview .preview-link:hover { text-decoration: underline; }
 
     .form-grid {
       display: grid;
@@ -313,7 +318,8 @@
     .form-field textarea { resize: vertical; min-height: 70px; }
     .form-field.full-width { grid-column: 1 / -1; }
 
-    #register-form button[type="submit"] {
+    #register-form button[type="submit"],
+    #visit-form button[type="submit"] {
       width: 100%;
       padding: 14px;
       background: linear-gradient(135deg, var(--green-dark), var(--green-mid) 60%, var(--green-light));
@@ -327,8 +333,13 @@
       letter-spacing: 2px;
       transition: opacity 0.2s, transform 0.1s;
     }
-    #register-form button[type="submit"]:hover  { opacity: 0.88; }
-    #register-form button[type="submit"]:active { transform: scale(0.98); }
+    #register-form button[type="submit"]:hover,
+    #visit-form button[type="submit"]:hover  { opacity: 0.88; }
+    #register-form button[type="submit"]:active,
+    #visit-form button[type="submit"]:active { transform: scale(0.98); }
+    #visit-form button[type="submit"] {
+      background: linear-gradient(135deg, #4a9aaa, #7bc8d8 60%, #a0dce6);
+    }
 
     /* ===== おすすめ一覧 ===== */
     #recommendations-section {
@@ -527,6 +538,180 @@
       pointer-events: none;
     }
     #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ===== タブバー ===== */
+    #tab-bar {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 18px 16px 0;
+      display: flex;
+      gap: 8px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 14px 0;
+      border: 1.5px solid var(--green-pale);
+      border-bottom: none;
+      border-radius: 14px 14px 0 0;
+      background: var(--green-mist);
+      color: var(--text-mid);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn:hover { background: var(--white); }
+    .tab-btn.active {
+      background: var(--white);
+      color: var(--green-dark);
+      border-color: var(--green-mid);
+      box-shadow: 0 -2px 8px var(--shadow-green);
+    }
+
+    /* ===== 訪問記録 ===== */
+    .section-card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 16px var(--shadow-green);
+      border: 1px solid var(--green-pale);
+    }
+
+    /* 混み具合レーティング */
+    .crowdedness-rating {
+      display: flex;
+      gap: 4px;
+      padding: 8px 0;
+    }
+    .crowdedness-rating .crowd-icon {
+      font-size: 24px;
+      cursor: pointer;
+      opacity: 0.25;
+      transition: opacity 0.15s, transform 0.1s;
+      user-select: none;
+    }
+    .crowdedness-rating .crowd-icon.active { opacity: 1; }
+    .crowdedness-rating .crowd-icon:hover { transform: scale(1.15); }
+
+    /* アメニティチェックボックス */
+    .amenity-checkboxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 8px 0;
+    }
+    .amenity-check {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      color: var(--text-mid);
+      cursor: pointer;
+    }
+    .amenity-check input[type="checkbox"] {
+      accent-color: var(--green-mid);
+      width: 16px;
+      height: 16px;
+    }
+    .towel-price-input {
+      width: 90px;
+      padding: 4px 8px;
+      border: 1.5px solid var(--green-pale);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      background: var(--green-mist);
+      color: var(--text-dark);
+      margin-left: 6px;
+    }
+
+    /* 訪問記録カードグリッド */
+    #visits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 22px;
+      margin-top: 16px;
+    }
+    .visit-card {
+      position: relative;
+      border: 1px solid var(--green-pale);
+      border-radius: 16px;
+      overflow: visible;
+      background: var(--white);
+      box-shadow: 0 2px 12px var(--shadow-green);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .visit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px var(--shadow-green);
+    }
+    .visit-date-badge {
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      background: var(--accent-blue);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(123,200,216,0.35);
+      z-index: 1;
+    }
+    .visit-visitor-badge {
+      position: absolute;
+      top: -10px;
+      right: 12px;
+      background: var(--green-mid);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(201,107,98,0.35);
+      z-index: 1;
+    }
+    .visit-card-body { padding: 14px 16px 16px; }
+    .visit-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .visit-stat {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    .stat-sauna-temp { background: #fdf0ed; color: #c96b62; }
+    .stat-water-temp { background: #d4eef3; color: #4a9aaa; }
+    .stat-outdoor    { background: var(--green-mist); color: var(--green-mid); }
+    .stat-time       { background: #f2eeec; color: #8a6560; }
+    .visit-crowdedness {
+      font-size: 18px;
+      margin: 6px 0;
+      letter-spacing: 2px;
+    }
+    .visit-amenities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0;
+    }
+    .amenity-tag {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: var(--accent-blue-light);
+      color: #4a9aaa;
+      font-weight: 600;
+    }
 
     /* ===== 暖簾スクリーン（レトロ銭湯風） ===== */
     #noren-screen {
@@ -871,79 +1056,186 @@
   <p>極上の整い体験を共有して、交感神経と副交感神経整えていこう！</p>
 </header>
 
+<nav id="tab-bar">
+  <button class="tab-btn active" data-tab="recommend">&#9832; おすすめ</button>
+  <button class="tab-btn" data-tab="visits">&#128221; 訪問記録</button>
+</nav>
+
 <main>
 
-  <!-- 検索セクション -->
-  <section id="search-section">
-    <div class="section-title">サウナを検索</div>
-    <div class="search-bar">
-      <input type="text" id="search-input" placeholder="施設名を入力（例：渋谷サウナ、スパラクーア...）" />
-      <button id="search-btn">検索</button>
-    </div>
-    <div id="search-results"></div>
-  </section>
+  <!-- ===== おすすめタブ ===== -->
+  <div id="tab-recommend">
+    <section id="search-section">
+      <div class="section-title">サウナを検索</div>
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="施設名を入力（例：渋谷サウナ、スパラクーア...）" />
+        <button id="search-btn">検索</button>
+      </div>
+      <div id="search-results"></div>
+    </section>
 
-  <!-- 登録フォーム -->
-  <section id="register-section">
-    <div class="section-title">おすすめを登録</div>
-    <div id="selected-sauna-preview"></div>
-    <form id="register-form">
-      <input type="hidden" id="f-sauna-id" />
-      <input type="hidden" id="f-sauna-name" />
-      <input type="hidden" id="f-sauna-url" />
-      <input type="hidden" id="f-sauna-image" />
-      <div class="form-grid">
-        <div class="form-field">
-          <label>あなたの名前 *</label>
-          <input type="text" id="f-poster" placeholder="例：福田" required />
+    <section id="register-section">
+      <div class="section-title">おすすめを登録</div>
+      <div id="selected-sauna-preview"></div>
+      <form id="register-form">
+        <input type="hidden" id="f-sauna-id" />
+        <input type="hidden" id="f-sauna-name" />
+        <input type="hidden" id="f-sauna-url" />
+        <input type="hidden" id="f-sauna-image" />
+        <div class="form-grid">
+          <div class="form-field">
+            <label>あなたの名前 *</label>
+            <input type="text" id="f-poster" placeholder="例：福田" required />
+          </div>
+          <div class="form-field">
+            <label>サウナ種別</label>
+            <select id="f-type">
+              <option value="">-- 選択してください --</option>
+              <option value="dry">ドライサウナ</option>
+              <option value="mist">ミストサウナ</option>
+              <option value="both">両方あり</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>水風呂</label>
+            <select id="f-water">
+              <option value="">-- 選択してください --</option>
+              <option value="yes">あり</option>
+              <option value="no">なし</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>整うスペース</label>
+            <select id="f-relax">
+              <option value="">-- 選択してください --</option>
+              <option value="yes">あり</option>
+              <option value="no">なし</option>
+            </select>
+          </div>
+          <div class="form-field full-width">
+            <label>ひとことコメント</label>
+            <textarea id="f-comment" placeholder="おすすめポイントを教えてください！"></textarea>
+          </div>
         </div>
-        <div class="form-field">
-          <label>サウナ種別</label>
-          <select id="f-type">
-            <option value="">-- 選択してください --</option>
-            <option value="dry">ドライサウナ</option>
-            <option value="mist">ミストサウナ</option>
-            <option value="both">両方あり</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label>水風呂</label>
-          <select id="f-water">
-            <option value="">-- 選択してください --</option>
-            <option value="yes">あり</option>
-            <option value="no">なし</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label>整うスペース</label>
-          <select id="f-relax">
-            <option value="">-- 選択してください --</option>
-            <option value="yes">あり</option>
-            <option value="no">なし</option>
-          </select>
-        </div>
-        <div class="form-field full-width">
-          <label>ひとことコメント</label>
-          <textarea id="f-comment" placeholder="おすすめポイントを教えてください！"></textarea>
+        <button type="submit">登録する！</button>
+      </form>
+    </section>
+
+    <section id="recommendations-section">
+      <div class="section-title">
+        みんなのおすすめ
+        <span id="rec-count"></span>
+      </div>
+      <div id="recommendations-grid">
+        <div id="empty-state">
+          <div class="empty-icon">🧖</div>
+          <p>まだおすすめがありません。<br>最初の1件を登録してみよう！</p>
         </div>
       </div>
-      <button type="submit">登録する！</button>
-    </form>
-  </section>
+    </section>
+  </div>
 
-  <!-- おすすめ一覧 -->
-  <section id="recommendations-section">
-    <div class="section-title">
-      みんなのおすすめ
-      <span id="rec-count"></span>
-    </div>
-    <div id="recommendations-grid">
-      <div id="empty-state">
-        <div class="empty-icon">🧖</div>
-        <p>まだおすすめがありません。<br>最初の1件を登録してみよう！</p>
+  <!-- ===== 訪問記録タブ ===== -->
+  <div id="tab-visits" style="display: none;">
+
+    <!-- 訪問記録：サウナ検索 -->
+    <section class="section-card">
+      <div class="section-title">サウナを検索して選択</div>
+      <div class="search-bar">
+        <input type="text" id="visit-search-input" placeholder="施設名を入力（例：渋谷サウナ、スパラクーア...）" />
+        <button id="visit-search-btn">検索</button>
       </div>
-    </div>
-  </section>
+      <div id="visit-search-results"></div>
+    </section>
+
+    <!-- 訪問記録：登録フォーム -->
+    <section id="visit-register-section" class="section-card" style="display: none;">
+      <div class="section-title">訪問記録を登録</div>
+      <div id="visit-selected-preview"></div>
+      <form id="visit-form">
+        <input type="hidden" id="vf-sauna-id" />
+        <input type="hidden" id="vf-sauna-name" />
+        <input type="hidden" id="vf-sauna-url" />
+        <input type="hidden" id="vf-sauna-image" />
+        <div class="form-grid">
+          <div class="form-field">
+            <label>あなたの名前 *</label>
+            <input type="text" id="vf-visitor" placeholder="例：福田" required />
+          </div>
+          <div class="form-field">
+            <label>訪問日 *</label>
+            <input type="date" id="vf-date" required />
+          </div>
+          <div class="form-field">
+            <label>行った時間帯</label>
+            <select id="vf-time">
+              <option value="">-- 選択 --</option>
+              <option value="朝">朝（〜10時）</option>
+              <option value="昼">昼（10〜15時）</option>
+              <option value="夕方">夕方（15〜18時）</option>
+              <option value="夜">夜（18〜22時）</option>
+              <option value="深夜">深夜（22時〜）</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>混み具合（タップで選択）</label>
+            <div id="vf-crowdedness" class="crowdedness-rating"></div>
+          </div>
+          <div class="form-field">
+            <label>サウナの温度（°C）</label>
+            <input type="number" id="vf-sauna-temp" placeholder="例：90" min="30" max="130" />
+          </div>
+          <div class="form-field">
+            <label>水風呂の温度（°C）</label>
+            <input type="number" id="vf-water-temp" placeholder="例：16" min="0" max="30" />
+          </div>
+          <div class="form-field">
+            <label>外気浴スペースの広さ</label>
+            <select id="vf-outdoor">
+              <option value="">-- 選択 --</option>
+              <option value="狭い">狭い</option>
+              <option value="やや狭い">やや狭い</option>
+              <option value="普通">普通</option>
+              <option value="広い">広い</option>
+              <option value="とても広い">とても広い</option>
+            </select>
+          </div>
+          <div class="form-field full-width">
+            <label>アメニティ</label>
+            <div class="amenity-checkboxes">
+              <label class="amenity-check"><input type="checkbox" id="vf-am-toner" /> 化粧水</label>
+              <label class="amenity-check"><input type="checkbox" id="vf-am-moisturizer" /> 乳液</label>
+              <label class="amenity-check"><input type="checkbox" id="vf-am-dryer" /> ドライヤー</label>
+              <label class="amenity-check">
+                <input type="checkbox" id="vf-am-towel" /> タオルレンタル
+                <input type="number" id="vf-am-towel-price" class="towel-price-input" placeholder="料金(円)" min="0" style="display:none;" />
+              </label>
+            </div>
+          </div>
+          <div class="form-field full-width">
+            <label>感想・メモ</label>
+            <textarea id="vf-comment" placeholder="整い具合やおすすめポイントを記録！"></textarea>
+          </div>
+        </div>
+        <button type="submit">訪問記録を登録する！</button>
+      </form>
+    </section>
+
+    <!-- 訪問記録：一覧 -->
+    <section class="section-card">
+      <div class="section-title">
+        みんなの訪問記録
+        <span id="visit-count"></span>
+      </div>
+      <div id="visits-grid">
+        <div class="empty-state-box">
+          <div class="empty-icon">📝</div>
+          <p>まだ訪問記録がありません。<br>サウナに行ったら記録してみよう！</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
 
 </main>
 
@@ -1184,6 +1476,271 @@
       setTimeout(() => screen.remove(), 500);
     }, 750);
   });
+
+  // ===== タブ切り替え =====
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      document.getElementById('tab-recommend').style.display = tab === 'recommend' ? '' : 'none';
+      document.getElementById('tab-visits').style.display    = tab === 'visits'    ? '' : 'none';
+      if (tab === 'visits') loadVisits();
+    });
+  });
+
+  // ===== 訪問記録：検索 =====
+  let selectedVisitSauna = null;
+  let visitCrowdedness = 0;
+
+  document.getElementById('visit-search-btn').addEventListener('click', doVisitSearch);
+  document.getElementById('visit-search-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doVisitSearch();
+  });
+
+  async function doVisitSearch() {
+    const keyword = document.getElementById('visit-search-input').value.trim();
+    if (!keyword) { showToast('施設名を入力してください'); return; }
+
+    const resultsEl = document.getElementById('visit-search-results');
+    resultsEl.innerHTML = '<div class="search-status">検索中...</div>';
+
+    try {
+      const res = await fetch(`/api/search?keyword=${encodeURIComponent(keyword)}`);
+      const data = await res.json();
+
+      if (data.error) {
+        resultsEl.innerHTML = `<div class="search-status error">${data.error}</div>`;
+        return;
+      }
+      if (!data.length) {
+        resultsEl.innerHTML = '<div class="search-status">施設が見つかりませんでした。</div>';
+        return;
+      }
+
+      resultsEl.innerHTML = data.map(s => `
+        <div class="search-card" data-vid="${s.id}" onclick="selectVisitSauna(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+          <img src="${s.image || ''}" alt="${s.name}"
+            onerror="this.style.display='none'"
+            style="${s.image ? '' : 'display:none'}">
+          <div class="search-card-body">
+            <div class="search-card-name">${s.name}</div>
+            <div class="search-card-meta">
+              ${s.area ? `<span>${s.area}</span>` : ''}
+              ${s.ikitai ? `<span class="ikitai-badge">イキタイ ${s.ikitai}</span>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } catch {
+      resultsEl.innerHTML = '<div class="search-status error">通信エラーが発生しました。</div>';
+    }
+  }
+
+  // ===== 訪問記録：施設選択 =====
+  function selectVisitSauna(sauna) {
+    selectedVisitSauna = sauna;
+
+    document.querySelectorAll('[data-vid]').forEach(c => c.classList.remove('selected'));
+    const card = document.querySelector(`[data-vid="${sauna.id}"]`);
+    if (card) card.classList.add('selected');
+
+    document.getElementById('vf-sauna-id').value    = sauna.id || '';
+    document.getElementById('vf-sauna-name').value  = sauna.name;
+    document.getElementById('vf-sauna-url').value   = sauna.url || '';
+    document.getElementById('vf-sauna-image').value = sauna.image || '';
+
+    document.getElementById('visit-selected-preview').innerHTML = `
+      ${sauna.image
+        ? `<img src="${sauna.image}" alt="${sauna.name}" onerror="this.style.display='none'">`
+        : ''}
+      <div>
+        <div class="preview-name">${sauna.name}</div>
+        ${sauna.url ? `<a class="preview-link" href="${sauna.url}" target="_blank">サウナ行きたいで見る →</a>` : ''}
+      </div>
+    `;
+
+    const sec = document.getElementById('visit-register-section');
+    sec.style.display = 'block';
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ===== 訪問記録：混み具合レーティング =====
+  (function initCrowdedness() {
+    const container = document.getElementById('vf-crowdedness');
+    for (let i = 1; i <= 5; i++) {
+      const icon = document.createElement('span');
+      icon.className = 'crowd-icon';
+      icon.textContent = '🧖';
+      icon.dataset.level = i;
+      icon.addEventListener('click', () => {
+        visitCrowdedness = i;
+        container.querySelectorAll('.crowd-icon').forEach(el => {
+          el.classList.toggle('active', parseInt(el.dataset.level) <= i);
+        });
+      });
+      container.appendChild(icon);
+    }
+  })();
+
+  // ===== 訪問記録：タオルレンタル価格トグル =====
+  document.getElementById('vf-am-towel').addEventListener('change', e => {
+    document.getElementById('vf-am-towel-price').style.display = e.target.checked ? 'inline-block' : 'none';
+    if (!e.target.checked) document.getElementById('vf-am-towel-price').value = '';
+  });
+
+  // ===== 訪問記録：アメニティ収集 =====
+  function collectAmenities() {
+    const amenities = [];
+    if (document.getElementById('vf-am-toner').checked)      amenities.push('toner');
+    if (document.getElementById('vf-am-moisturizer').checked) amenities.push('moisturizer');
+    if (document.getElementById('vf-am-dryer').checked)       amenities.push('dryer');
+    if (document.getElementById('vf-am-towel').checked) {
+      const price = parseInt(document.getElementById('vf-am-towel-price').value) || 0;
+      amenities.push({ towel_rental: price });
+    }
+    return amenities;
+  }
+
+  // ===== 訪問記録：登録 =====
+  document.getElementById('visit-form').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const visitorName = document.getElementById('vf-visitor').value.trim();
+    const visitDate   = document.getElementById('vf-date').value;
+    if (!visitorName) { showToast('名前を入力してください'); return; }
+    if (!visitDate)   { showToast('訪問日を入力してください'); return; }
+    if (!selectedVisitSauna) { showToast('施設を選択してください'); return; }
+
+    const payload = {
+      saunaId:      document.getElementById('vf-sauna-id').value,
+      saunaName:    document.getElementById('vf-sauna-name').value,
+      saunaUrl:     document.getElementById('vf-sauna-url').value,
+      saunaImage:   document.getElementById('vf-sauna-image').value,
+      visitorName,
+      visitDate,
+      timeOfDay:    document.getElementById('vf-time').value,
+      crowdedness:  visitCrowdedness || null,
+      saunaTemp:    parseInt(document.getElementById('vf-sauna-temp').value) || null,
+      waterTemp:    parseInt(document.getElementById('vf-water-temp').value) || null,
+      outdoorSpace: document.getElementById('vf-outdoor').value,
+      amenities:    collectAmenities(),
+      comment:      document.getElementById('vf-comment').value.trim(),
+    };
+
+    try {
+      const res = await fetch('/api/visits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.error) { showToast(data.error); return; }
+
+      showToast('訪問記録を登録しました！');
+      e.target.reset();
+      document.getElementById('visit-register-section').style.display = 'none';
+      document.querySelectorAll('[data-vid]').forEach(c => c.classList.remove('selected'));
+      selectedVisitSauna = null;
+      visitCrowdedness = 0;
+      document.querySelectorAll('.crowd-icon').forEach(el => el.classList.remove('active'));
+      document.getElementById('vf-am-towel-price').style.display = 'none';
+      loadVisits();
+    } catch {
+      showToast('登録に失敗しました');
+    }
+  });
+
+  // ===== 訪問記録：一覧読み込み =====
+  async function loadVisits() {
+    try {
+      const res  = await fetch('/api/visits');
+      const data = await res.json();
+      renderVisits(data);
+    } catch {
+      console.error('訪問記録の読み込みに失敗しました');
+    }
+  }
+
+  const amenityLabels = { toner: '化粧水', moisturizer: '乳液', dryer: 'ドライヤー' };
+  const timeIcons = { '朝': '🌅', '昼': '☀️', '夕方': '🌇', '夜': '🌙', '深夜': '🌃' };
+
+  function renderVisits(list) {
+    const grid  = document.getElementById('visits-grid');
+    const count = document.getElementById('visit-count');
+    count.textContent = list.length ? `（${list.length}件）` : '';
+
+    if (!list.length) {
+      grid.innerHTML = `
+        <div style="text-align:center;padding:40px 20px;color:var(--text-light);grid-column:1/-1;">
+          <div style="font-size:48px;margin-bottom:12px;">📝</div>
+          <p style="font-size:14px;line-height:1.8;">まだ訪問記録がありません。<br>サウナに行ったら記録してみよう！</p>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(v => {
+      const crowdIcons = v.crowdedness
+        ? '🧖'.repeat(v.crowdedness) + '<span style="opacity:0.2">' + '🧖'.repeat(5 - v.crowdedness) + '</span>'
+        : '';
+
+      const amenityHtml = (v.amenities || []).map(a => {
+        if (typeof a === 'string') return `<span class="amenity-tag">${amenityLabels[a] || a}</span>`;
+        if (a.towel_rental !== undefined) return `<span class="amenity-tag">タオル${a.towel_rental ? `（${a.towel_rental}円）` : '（無料）'}</span>`;
+        return '';
+      }).join('');
+
+      return `
+        <div class="visit-card">
+          <span class="visit-date-badge">${escHtml(v.visitDate)}</span>
+          <span class="visit-visitor-badge">${escHtml(v.visitorName)}</span>
+
+          <div class="rec-card-img">
+            ${v.saunaImage
+              ? `<img src="${v.saunaImage}" alt="${escHtml(v.saunaName)}"
+                      onerror="this.parentElement.innerHTML='<div class=no-img>🧖</div>'">`
+              : '<div class="no-img">🧖</div>'}
+          </div>
+
+          <div class="visit-card-body">
+            <div class="rec-card-name">
+              ${v.saunaUrl
+                ? `<a href="${v.saunaUrl}" target="_blank">${escHtml(v.saunaName)}</a>`
+                : escHtml(v.saunaName)}
+            </div>
+
+            <div class="visit-stats">
+              ${v.timeOfDay ? `<span class="visit-stat stat-time">${timeIcons[v.timeOfDay] || ''} ${v.timeOfDay}</span>` : ''}
+              ${v.saunaTemp ? `<span class="visit-stat stat-sauna-temp">🔥 ${v.saunaTemp}°C</span>` : ''}
+              ${v.waterTemp ? `<span class="visit-stat stat-water-temp">💧 ${v.waterTemp}°C</span>` : ''}
+              ${v.outdoorSpace ? `<span class="visit-stat stat-outdoor">🌿 ${v.outdoorSpace}</span>` : ''}
+            </div>
+
+            ${crowdIcons ? `<div class="visit-crowdedness" title="混み具合: ${v.crowdedness}/5">${crowdIcons}</div>` : ''}
+            ${amenityHtml ? `<div class="visit-amenities">${amenityHtml}</div>` : ''}
+            ${v.comment ? `<div class="rec-comment">"${escHtml(v.comment)}"</div>` : ''}
+
+            <div class="rec-card-footer">
+              <span class="rec-date">登録: ${formatDate(v.createdAt)}</span>
+              <button class="rec-delete-btn" onclick="deleteVisit(${v.id})" title="削除">×</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ===== 訪問記録：削除 =====
+  async function deleteVisit(id) {
+    if (!confirm('この訪問記録を削除しますか？')) return;
+    try {
+      await fetch(`/api/visits/${id}`, { method: 'DELETE' });
+      showToast('削除しました');
+      loadVisits();
+    } catch {
+      showToast('削除に失敗しました');
+    }
+  }
 
   // ===== 浮かぶ絵文字 =====
   const emojiContainer = document.createElement('div');

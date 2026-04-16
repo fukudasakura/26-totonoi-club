@@ -163,6 +163,109 @@ app.delete('/api/recommendations/:id', async (req, res) => {
   }
 });
 
+// ---- 訪問記録一覧取得 ----
+app.get('/api/visits', async (_, res) => {
+  try {
+    const { data } = await axios.get(
+      `${SUPABASE_URL}/rest/v1/visits?order=visit_date.desc,created_at.desc`,
+      { headers: sbHeaders }
+    );
+    const mapped = data.map(r => ({
+      id: r.id,
+      saunaId: r.sauna_id,
+      saunaName: r.sauna_name,
+      saunaUrl: r.sauna_url,
+      saunaImage: r.sauna_image,
+      visitorName: r.visitor_name,
+      visitDate: r.visit_date,
+      timeOfDay: r.time_of_day,
+      crowdedness: r.crowdedness,
+      saunaTemp: r.sauna_temp,
+      waterTemp: r.water_temp,
+      outdoorSpace: r.outdoor_space,
+      amenities: r.amenities,
+      comment: r.comment,
+      createdAt: r.created_at,
+    }));
+    res.json(mapped);
+  } catch (error) {
+    console.error('訪問記録取得エラー:', error.message);
+    res.json([]);
+  }
+});
+
+// ---- 訪問記録登録 ----
+app.post('/api/visits', async (req, res) => {
+  try {
+    const {
+      saunaId, saunaName, saunaUrl, saunaImage,
+      visitorName, visitDate, timeOfDay, crowdedness,
+      saunaTemp, waterTemp, outdoorSpace, amenities, comment
+    } = req.body;
+
+    if (!saunaName || !visitorName || !visitDate) {
+      return res.status(400).json({ error: '施設名・訪問者名・訪問日は必須です' });
+    }
+
+    const { data } = await axios.post(
+      `${SUPABASE_URL}/rest/v1/visits`,
+      {
+        sauna_id: saunaId || null,
+        sauna_name: saunaName,
+        sauna_url: saunaUrl || null,
+        sauna_image: saunaImage || null,
+        visitor_name: visitorName,
+        visit_date: visitDate,
+        time_of_day: timeOfDay || null,
+        crowdedness: crowdedness || null,
+        sauna_temp: saunaTemp || null,
+        water_temp: waterTemp || null,
+        outdoor_space: outdoorSpace || null,
+        amenities: amenities || [],
+        comment: comment || '',
+      },
+      { headers: { ...sbHeaders, 'Prefer': 'return=representation' } }
+    );
+
+    const r = data[0];
+    res.json({
+      id: r.id,
+      saunaId: r.sauna_id,
+      saunaName: r.sauna_name,
+      saunaUrl: r.sauna_url,
+      saunaImage: r.sauna_image,
+      visitorName: r.visitor_name,
+      visitDate: r.visit_date,
+      timeOfDay: r.time_of_day,
+      crowdedness: r.crowdedness,
+      saunaTemp: r.sauna_temp,
+      waterTemp: r.water_temp,
+      outdoorSpace: r.outdoor_space,
+      amenities: r.amenities,
+      comment: r.comment,
+      createdAt: r.created_at,
+    });
+  } catch (error) {
+    console.error('訪問記録登録エラー:', error.response?.data || error.message);
+    res.status(500).json({ error: '登録に失敗しました' });
+  }
+});
+
+// ---- 訪問記録削除 ----
+app.delete('/api/visits/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    await axios.delete(
+      `${SUPABASE_URL}/rest/v1/visits?id=eq.${id}`,
+      { headers: sbHeaders }
+    );
+    res.json({ ok: true });
+  } catch (error) {
+    console.error('訪問記録削除エラー:', error.message);
+    res.status(500).json({ error: '削除に失敗しました' });
+  }
+});
+
 // ---- どのURLでもindex.htmlを返す ----
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
