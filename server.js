@@ -95,6 +95,7 @@ app.get('/api/recommendations', async (_, res) => {
       waterBath: r.water_bath,
       relaxArea: r.relax_area,
       comment: r.comment,
+      likes: r.likes || 0,
       createdAt: r.created_at,
     }));
     res.json(mapped);
@@ -143,6 +144,7 @@ app.post('/api/recommendations', async (req, res) => {
       waterBath: r.water_bath,
       relaxArea: r.relax_area,
       comment: r.comment,
+      likes: r.likes || 0,
       createdAt: r.created_at,
     });
   } catch (error) {
@@ -163,6 +165,34 @@ app.delete('/api/recommendations/:id', async (req, res) => {
   } catch (error) {
     console.error('削除エラー:', error.message);
     res.status(500).json({ error: '削除に失敗しました' });
+  }
+});
+
+// ---- いいねトグル ----
+app.post('/api/recommendations/:id/like', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { delta } = req.body; // +1 or -1
+
+    // 現在の値を取得
+    const { data: current } = await axios.get(
+      `${SUPABASE_URL}/rest/v1/recommendations?id=eq.${id}&select=likes`,
+      { headers: sbHeaders }
+    );
+    if (!current.length) return res.status(404).json({ error: '見つかりません' });
+
+    const newLikes = Math.max(0, (current[0].likes || 0) + (delta || 1));
+
+    const { data } = await axios.patch(
+      `${SUPABASE_URL}/rest/v1/recommendations?id=eq.${id}`,
+      { likes: newLikes },
+      { headers: { ...sbHeaders, 'Prefer': 'return=representation' } }
+    );
+
+    res.json({ likes: data[0].likes });
+  } catch (error) {
+    console.error('いいねエラー:', error.response?.data || error.message);
+    res.status(500).json({ error: 'いいねに失敗しました' });
   }
 });
 

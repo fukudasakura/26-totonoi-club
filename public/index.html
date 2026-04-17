@@ -566,6 +566,97 @@
     }
     .kiroku-btn:active { transform: scale(0.97); }
 
+    /* いいねボタン */
+    .like-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 16px;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), background 0.2s;
+      color: var(--text-light);
+    }
+    .like-btn:hover { background: rgba(123,200,216,0.1); }
+    .like-btn.liked { color: #3b82f6; }
+    .like-btn .like-count {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    @keyframes likePopAnim {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+    .like-btn.pop { animation: likePopAnim 0.35s ease; }
+
+    /* TOP3ランキング */
+    .top3-section {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 16px var(--shadow-green);
+      border: 1px solid var(--green-pale);
+    }
+    .top3-grid {
+      display: flex;
+      gap: 14px;
+      margin-top: 14px;
+      overflow-x: auto;
+    }
+    .top3-card {
+      flex: 1;
+      min-width: 180px;
+      border: 1.5px solid var(--green-pale);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--white);
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .top3-card:hover { transform: translateY(-3px); }
+    .top3-rank {
+      position: absolute;
+      top: 8px; left: 8px;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      color: white;
+      z-index: 1;
+    }
+    .top3-rank.rank-1 { background: linear-gradient(135deg, #f0c040, #d4a020); }
+    .top3-rank.rank-2 { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); }
+    .top3-rank.rank-3 { background: linear-gradient(135deg, #cd7f32, #a06020); }
+    .top3-img {
+      width: 100%; height: 100px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #f5d5cf, #d4eef3);
+    }
+    .top3-body { padding: 10px 12px; }
+    .top3-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .top3-likes {
+      font-size: 12px;
+      color: #3b82f6;
+      font-weight: 600;
+    }
+
     /* 訪問記録ハイライト */
     .visit-card.highlighted {
       border-color: #43a047;
@@ -1808,6 +1899,12 @@
       </form>
     </section>
 
+    <!-- TOP3ランキング -->
+    <section id="top3-section" class="top3-section" style="display:none;">
+      <div class="section-title">🩵 みんなが気になってるサウナ TOP3</div>
+      <div id="top3-grid" class="top3-grid"></div>
+    </section>
+
     <section id="recommendations-section">
       <div class="section-title">
         みんなのおすすめ
@@ -2097,9 +2194,82 @@
     }
   }
 
+  // いいね状態管理（localStorage）
+  function getLikedIds() {
+    try { return new Set(JSON.parse(localStorage.getItem('likedRecs') || '[]')); }
+    catch { return new Set(); }
+  }
+  function saveLikedIds(ids) {
+    localStorage.setItem('likedRecs', JSON.stringify([...ids]));
+  }
+
+  async function toggleLike(recId) {
+    const likedIds = getLikedIds();
+    const isLiked = likedIds.has(recId);
+    const delta = isLiked ? -1 : 1;
+
+    // ボタンをアニメーション
+    const btn = document.querySelector(`.like-btn[data-rec-id="${recId}"]`);
+    if (btn) { btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop'); }
+
+    try {
+      const res = await fetch(`/api/recommendations/${recId}/like`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ delta }),
+      });
+      const data = await res.json();
+      if (data.error) { showToast(data.error); return; }
+
+      // localStorage更新
+      if (isLiked) likedIds.delete(recId);
+      else likedIds.add(recId);
+      saveLikedIds(likedIds);
+
+      // ボタン表示更新
+      if (btn) {
+        btn.classList.toggle('liked', !isLiked);
+        btn.querySelector('.like-icon').textContent = !isLiked ? '💙' : '🩵';
+        btn.querySelector('.like-count').textContent = data.likes;
+      }
+
+      // TOP3も更新
+      loadRecommendations();
+    } catch {
+      showToast('いいねに失敗しました');
+    }
+  }
+
+  function renderTop3(list) {
+    const section = document.getElementById('top3-section');
+    const grid = document.getElementById('top3-grid');
+    const sorted = [...list].filter(r => r.likes > 0)
+      .sort((a, b) => b.likes - a.likes || new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 3);
+
+    if (!sorted.length) { section.style.display = 'none'; return; }
+    section.style.display = '';
+
+    const rankClass = ['rank-1', 'rank-2', 'rank-3'];
+    grid.innerHTML = sorted.map((r, i) => `
+      <div class="top3-card">
+        <div class="top3-rank ${rankClass[i]}">${i + 1}</div>
+        ${r.saunaImage
+          ? `<img class="top3-img" src="${r.saunaImage}" alt="${escHtml(r.saunaName)}" onerror="this.style.display='none'">`
+          : `<div class="top3-img" style="display:flex;align-items:center;justify-content:center;font-size:32px;">🧖</div>`}
+        <div class="top3-body">
+          <div class="top3-name">${escHtml(r.saunaName)}</div>
+          <div class="top3-likes">💙 ${r.likes}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
   function renderRecommendations(list, visitedNames = new Set()) {
+    const likedIds = getLikedIds();
     const grid   = document.getElementById('recommendations-grid');
     const count  = document.getElementById('rec-count');
+    renderTop3(list);
     count.textContent = list.length ? `（${list.length}件）` : '';
 
     if (!list.length) {
@@ -2155,7 +2325,13 @@
 
           <div class="rec-card-footer">
             <span class="rec-date">${formatDate(r.createdAt)}</span>
-            <button class="rec-delete-btn" onclick="deleteRec(${r.id})" title="削除">×</button>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <button class="like-btn ${likedIds.has(r.id) ? 'liked' : ''}" data-rec-id="${r.id}" onclick="toggleLike(${r.id})">
+                <span class="like-icon">${likedIds.has(r.id) ? '💙' : '🩵'}</span>
+                <span class="like-count">${r.likes || 0}</span>
+              </button>
+              <button class="rec-delete-btn" onclick="deleteRec(${r.id})" title="削除">×</button>
+            </div>
           </div>
         </div>
       </div>
