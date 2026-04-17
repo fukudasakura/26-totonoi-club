@@ -321,7 +321,7 @@ function verifySlackSignature(req) {
   if (!SLACK_SIGNING_SECRET) return true; // ローカルテスト用
   const timestamp = req.headers['x-slack-request-timestamp'];
   const sig = req.headers['x-slack-signature'];
-  if (!timestamp || !sig) return false;
+  if (!timestamp || !sig) return !SLACK_SIGNING_SECRET; // ヘッダーなし＆Secret未設定ならローカルテスト通す
   // 5分以上古いリクエストは拒否
   if (Math.abs(Date.now() / 1000 - timestamp) > 300) return false;
   const base = `v0:${timestamp}:${req.rawBody}`;
@@ -432,6 +432,45 @@ ${text}
     return null;
   }
 }
+
+// ---- サウナイベント手動登録 ----
+app.post('/api/events', async (req, res) => {
+  try {
+    const { saunaName, location, eventDate, meetTime, endTime, posterName } = req.body;
+
+    if (!saunaName || !eventDate || !posterName) {
+      return res.status(400).json({ error: 'サウナ名・日付・投稿者名は必須です' });
+    }
+
+    const { data } = await axios.post(
+      `${SUPABASE_URL}/rest/v1/sauna_events`,
+      {
+        sauna_name: saunaName,
+        location: location || null,
+        event_date: eventDate,
+        meet_time: meetTime || null,
+        end_time: endTime || null,
+        poster_name: posterName,
+      },
+      { headers: { ...sbHeaders, 'Prefer': 'return=representation' } }
+    );
+
+    const r = data[0];
+    res.json({
+      id: r.id,
+      saunaName: r.sauna_name,
+      location: r.location,
+      eventDate: r.event_date,
+      meetTime: r.meet_time,
+      endTime: r.end_time,
+      posterName: r.poster_name,
+      createdAt: r.created_at,
+    });
+  } catch (error) {
+    console.error('イベント登録エラー:', error.response?.data || error.message);
+    res.status(500).json({ error: '登録に失敗しました' });
+  }
+});
 
 // ---- サウナイベント一覧取得 ----
 app.get('/api/events', async (_, res) => {

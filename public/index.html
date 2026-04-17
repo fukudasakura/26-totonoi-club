@@ -139,7 +139,9 @@
       box-shadow: 0 2px 16px var(--shadow-green);
       border: 1px solid var(--green-pale);
     }
-    .search-bar { display: flex; gap: 10px; }
+    .search-bar { display: flex; gap: 10px; flex-wrap: wrap; }
+    .search-bar input { min-width: 0; }
+    .search-bar button { flex-shrink: 0; }
     .search-bar input {
       flex: 1;
       padding: 12px 16px;
@@ -319,7 +321,8 @@
     .form-field.full-width { grid-column: 1 / -1; }
 
     #register-form button[type="submit"],
-    #visit-form button[type="submit"] {
+    #visit-form button[type="submit"],
+    #event-form button[type="submit"] {
       width: 100%;
       padding: 14px;
       background: linear-gradient(135deg, var(--green-dark), var(--green-mid) 60%, var(--green-light));
@@ -334,10 +337,13 @@
       transition: opacity 0.2s, transform 0.1s;
     }
     #register-form button[type="submit"]:hover,
-    #visit-form button[type="submit"]:hover  { opacity: 0.88; }
+    #visit-form button[type="submit"]:hover,
+    #event-form button[type="submit"]:hover  { opacity: 0.88; }
     #register-form button[type="submit"]:active,
-    #visit-form button[type="submit"]:active { transform: scale(0.98); }
-    #visit-form button[type="submit"] {
+    #visit-form button[type="submit"]:active,
+    #event-form button[type="submit"]:active { transform: scale(0.98); }
+    #visit-form button[type="submit"],
+    #event-form button[type="submit"] {
       background: linear-gradient(135deg, #4a9aaa, #7bc8d8 60%, #a0dce6);
     }
 
@@ -2127,9 +2133,43 @@
   <!-- ===== 次のサウナタブ ===== -->
   <div id="tab-events" style="display: none;">
 
+    <!-- 予定登録フォーム -->
     <section class="section-card">
-      <div class="section-title">📅 次のサウナ予定</div>
-      <p style="font-size:13px;color:var(--text-mid);margin-bottom:16px;">Slackのサウナ部チャンネルから自動でキャッチした予定です</p>
+      <div class="section-title">🔥 サウナ予定を登録</div>
+      <form id="event-form">
+        <div class="form-grid">
+          <div class="form-field">
+            <label>サウナ名 *</label>
+            <input type="text" id="ef-name" placeholder="例：サウナ道場" required />
+          </div>
+          <div class="form-field">
+            <label>場所</label>
+            <input type="text" id="ef-location" placeholder="例：東京都渋谷区" />
+          </div>
+          <div class="form-field">
+            <label>日付 *</label>
+            <input type="date" id="ef-date" required />
+          </div>
+          <div class="form-field">
+            <label>集合時間</label>
+            <input type="time" id="ef-meet-time" />
+          </div>
+          <div class="form-field">
+            <label>解散時間</label>
+            <input type="time" id="ef-end-time" />
+          </div>
+          <div class="form-field">
+            <label>投稿者名 *</label>
+            <input type="text" id="ef-poster" placeholder="例：福田" required />
+          </div>
+        </div>
+        <button type="submit">サウナ予定を登録する！</button>
+      </form>
+    </section>
+
+    <!-- 予定一覧 -->
+    <section class="section-card">
+      <div class="section-title">📅 みんなのサウナ予定 <span id="event-count"></span></div>
       <div id="events-grid"></div>
     </section>
 
@@ -2870,6 +2910,42 @@
       showToast('削除に失敗しました');
     }
   }
+
+  // ===== 次のサウナ：登録 =====
+  document.getElementById('event-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const saunaName  = document.getElementById('ef-name').value.trim();
+    const eventDate  = document.getElementById('ef-date').value;
+    const posterName = document.getElementById('ef-poster').value.trim();
+    if (!saunaName || !eventDate || !posterName) {
+      showToast('サウナ名・日付・投稿者名を入力してください');
+      return;
+    }
+
+    const payload = {
+      saunaName,
+      location:  document.getElementById('ef-location').value.trim(),
+      eventDate,
+      meetTime:  document.getElementById('ef-meet-time').value,
+      endTime:   document.getElementById('ef-end-time').value,
+      posterName,
+    };
+
+    try {
+      const res = await fetch('/api/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.error) { showToast(data.error); return; }
+      showToast('サウナ予定を登録しました！');
+      e.target.reset();
+      loadEvents();
+    } catch {
+      showToast('登録に失敗しました');
+    }
+  });
 
   // ===== 次のサウナ：一覧読み込み =====
   async function loadEvents() {
