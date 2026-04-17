@@ -1,11 +1,22 @@
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const cors = require('cors');
 const path = require('path');
+const crypto = require('crypto');
+const Anthropic = require('@anthropic-ai/sdk');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Slack 設定
+const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN || '';
+const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET || '';
+const SLACK_CHANNEL_ID = process.env.SLACK_CHANNEL_ID || '';
+
+// Anthropic 設定
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY || '' });
 
 // Supabase 設定
 const SUPABASE_URL = 'https://fpusfyatdhftklsywkjo.supabase.co';
@@ -17,7 +28,10 @@ const sbHeaders = {
 };
 
 app.use(cors());
-app.use(express.json());
+// Slack署名検証用にrawBodyを保存
+app.use(express.json({
+  verify: (req, _res, buf) => { req.rawBody = buf.toString(); },
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ルートを明示的に返す
@@ -299,6 +313,149 @@ app.delete('/api/visits/:id', async (req, res) => {
   } catch (error) {
     console.error('訪問記録削除エラー:', error.message);
     res.status(500).json({ error: '削除に失敗しました' });
+  }
+});
+
+// ---- Slack署名検証 ----
+function verifySlackSignature(req) {
+  if (!SLACK_SIGNING_SECRET) return true; // ローカルテスト用
+  const timestamp = req.headers['x-slack-request-timestamp'];
+  const sig = req.headers['x-slack-signature'];
+  if (!timestamp || !sig) return false;
+  // 5分以上古いリクエストは拒否
+  if (Math.abs(Date.now() / 1000 - timestamp) > 300) return false;
+  const base = `v0:${timestamp}:${req.rawBody}`;
+  const hash = 'v0=' + crypto.createHmac('sha256', SLACK_SIGNING_SECRET).update(base).digest('hex');
+  return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(sig));
+}
+
+// ---- Slackイベント受信 ----
+app.post('/api/slack/events', async (req, res) => {
+  // URL verification (Slack初回設定時)
+  if (req.body.type === 'url_verification') {
+    return res.json({ challenge: req.body.challenge });
+  }
+
+  // 署名検証
+  if (!verifySlackSignature(req)) {
+    return res.status(401).json({ error: 'Invalid signature' });
+  }
+
+  // イベント処理（非同期で応答は先に返す）
+  res.status(200).send('ok');
+
+  try {
+    const event = req.body.event;
+    if (!event || event.type !== 'message' || event.subtype || event.bot_id) return;
+
+    // 対象チャンネルチェック
+    if (SLACK_CHANNEL_ID && event.channel !== SLACK_CHANNEL_ID) return;
+
+    const text = event.text || '';
+    if (!text.trim()) return;
+
+    // 重複チェック（slack_ts）
+    const { data: existing } = await axios.get(
+      `${SUPABASE_URL}/rest/v1/sauna_events?slack_ts=eq.${event.ts}&select=id`,
+      { headers: sbHeaders }
+    );
+    if (existing && existing.length > 0) return;
+
+    // Slackユーザー名を取得
+    let posterName = 'unknown';
+    try {
+      const userRes = await axios.get(`https://slack.com/api/users.info?user=${event.user}`, {
+        headers: { 'Authorization': `Bearer ${SLACK_BOT_TOKEN}` },
+      });
+      if (userRes.data.ok) {
+        posterName = userRes.data.user.profile.display_name || userRes.data.user.real_name || 'unknown';
+      }
+    } catch { /* ignore */ }
+
+    // Claude APIでサウナ情報を抽出
+    const extracted = await extractSaunaEvent(text);
+    if (!extracted) return; // サウナ関連じゃない投稿はスキップ
+
+    // SlackメッセージURL生成
+    const messageUrl = `https://beartail.slack.com/archives/${event.channel}/p${event.ts.replace('.', '')}`;
+
+    // Supabaseに保存
+    await axios.post(
+      `${SUPABASE_URL}/rest/v1/sauna_events`,
+      {
+        sauna_name: extracted.saunaName || null,
+        location: extracted.location || null,
+        event_date: extracted.eventDate || null,
+        meet_time: extracted.meetTime || null,
+        end_time: extracted.endTime || null,
+        poster_name: posterName,
+        slack_message_url: messageUrl,
+        slack_ts: event.ts,
+        raw_text: text.slice(0, 500),
+      },
+      { headers: { ...sbHeaders, 'Prefer': 'return=representation' } }
+    );
+    console.log('サウナイベント保存:', extracted.saunaName || '(名称不明)');
+  } catch (error) {
+    console.error('Slackイベント処理エラー:', error.response?.data || error.message);
+  }
+});
+
+// ---- Claude APIでサウナ情報抽出 ----
+async function extractSaunaEvent(text) {
+  try {
+    const response = await anthropic.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 300,
+      messages: [{
+        role: 'user',
+        content: `以下のSlack投稿からサウナの予定情報を抽出してください。
+サウナに関係ない投稿の場合は "null" とだけ返してください。
+
+投稿内容：
+${text}
+
+以下のJSON形式で返してください（該当しない項目はnull）：
+{"saunaName":"施設名","location":"場所（都道府県・市区町村）","eventDate":"YYYY-MM-DD","meetTime":"HH:MM","endTime":"HH:MM"}`,
+      }],
+    });
+
+    const content = response.content[0].text.trim();
+    if (content === 'null' || content === '"null"') return null;
+
+    // JSONを抽出
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return null;
+    return JSON.parse(jsonMatch[0]);
+  } catch (error) {
+    console.error('AI抽出エラー:', error.message);
+    return null;
+  }
+}
+
+// ---- サウナイベント一覧取得 ----
+app.get('/api/events', async (_, res) => {
+  try {
+    const { data } = await axios.get(
+      `${SUPABASE_URL}/rest/v1/sauna_events?order=event_date.desc.nullslast,created_at.desc`,
+      { headers: sbHeaders }
+    );
+    const mapped = data.map(r => ({
+      id: r.id,
+      saunaName: r.sauna_name,
+      location: r.location,
+      eventDate: r.event_date,
+      meetTime: r.meet_time,
+      endTime: r.end_time,
+      posterName: r.poster_name,
+      slackMessageUrl: r.slack_message_url,
+      rawText: r.raw_text,
+      createdAt: r.created_at,
+    }));
+    res.json(mapped);
+  } catch (error) {
+    console.error('イベント取得エラー:', error.message);
+    res.json([]);
   }
 });
 

@@ -566,6 +566,31 @@
     }
     .kiroku-btn:active { transform: scale(0.97); }
 
+    .yoyaku-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      background: #fff3e0;
+      color: #e65100;
+      border: 1.5px solid #ffe0b2;
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
+      letter-spacing: 0.5px;
+    }
+    .yoyaku-btn:hover {
+      background: #e65100;
+      color: white;
+      border-color: #e65100;
+      transform: scale(1.04);
+    }
+    .yoyaku-btn:active { transform: scale(0.97); }
+
     /* いいねボタン */
     .like-btn {
       display: inline-flex;
@@ -1167,6 +1192,82 @@
       font-weight: 600;
     }
 
+    /* ===== 次のサウナ イベントカード ===== */
+    #events-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .event-card {
+      display: flex;
+      gap: 16px;
+      padding: 18px;
+      border: 1.5px solid var(--green-pale);
+      border-radius: 14px;
+      background: var(--white);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .event-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px var(--shadow-green);
+    }
+    .event-date-box {
+      flex-shrink: 0;
+      width: 70px;
+      text-align: center;
+      background: var(--accent-blue-light);
+      border-radius: 12px;
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .event-date-month {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+    }
+    .event-date-day {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent-blue);
+      font-family: 'Montserrat', sans-serif;
+      line-height: 1;
+    }
+    .event-info { flex: 1; }
+    .event-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+    .event-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-mid);
+      margin-bottom: 8px;
+    }
+    .event-poster {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    .event-slack-link {
+      display: inline-block;
+      font-size: 12px;
+      color: var(--accent-blue);
+      text-decoration: none;
+      margin-top: 4px;
+    }
+    .event-slack-link:hover { text-decoration: underline; }
+    @media (max-width: 500px) {
+      .event-card { flex-direction: column; gap: 10px; }
+      .event-date-box { width: 100%; flex-direction: row; gap: 8px; padding: 8px 14px; }
+    }
+
     /* ===== フローティングシャボン玉ナビ ===== */
     #bubble-nav {
       position: fixed;
@@ -1622,6 +1723,7 @@
   <button class="tab-btn active" data-tab="guide">&#128293; 指南書</button>
   <button class="tab-btn" data-tab="recommend">&#9832; おすすめ</button>
   <button class="tab-btn" data-tab="visits">&#128099; 訪問記録</button>
+  <button class="tab-btn" data-tab="events">&#128197; 次のサウナ</button>
 </nav>
 
 <main>
@@ -2022,6 +2124,17 @@
 
   </div>
 
+  <!-- ===== 次のサウナタブ ===== -->
+  <div id="tab-events" style="display: none;">
+
+    <section class="section-card">
+      <div class="section-title">📅 次のサウナ予定</div>
+      <p style="font-size:13px;color:var(--text-mid);margin-bottom:16px;">Slackのサウナ部チャンネルから自動でキャッチした予定です</p>
+      <div id="events-grid"></div>
+    </section>
+
+  </div>
+
 </main>
 
 <div id="toast"></div>
@@ -2039,6 +2152,10 @@
   <div class="bubble-item">
     <span class="bubble-label">訪問記録</span>
     <button class="bubble-btn" data-bubble="visits">👣</button>
+  </div>
+  <div class="bubble-item">
+    <span class="bubble-label">次のサウナ</span>
+    <button class="bubble-btn" data-bubble="events">📅</button>
   </div>
 </nav>
 
@@ -2321,6 +2438,7 @@
               ? `<button class="itta-btn" onclick="showVisitRecords('${escHtml(r.saunaName).replace(/'/g,"\\'")}')">&check; 行った！</button>`
               : ''}
             <button class="kiroku-btn" onclick="goToVisitForm({id:'${r.saunaId||''}',name:'${escHtml(r.saunaName).replace(/'/g,"\\'")}',url:'${r.saunaUrl||''}',image:'${r.saunaImage||''}',area:'${escHtml(r.saunaArea||'').replace(/'/g,"\\'")}'})">✏️ 記録を書く</button>
+            <a class="yoyaku-btn" href="https://www.google.com/search?q=${encodeURIComponent(r.saunaName + ' 予約')}" target="_blank">📅 予約する</a>
           </div>
 
           <div class="rec-card-footer">
@@ -2387,7 +2505,9 @@
     document.getElementById('tab-guide').style.display     = tab === 'guide'     ? '' : 'none';
     document.getElementById('tab-recommend').style.display = tab === 'recommend' ? '' : 'none';
     document.getElementById('tab-visits').style.display    = tab === 'visits'    ? '' : 'none';
+    document.getElementById('tab-events').style.display    = tab === 'events'    ? '' : 'none';
     if (tab === 'visits') loadVisits();
+    if (tab === 'events') loadEvents();
 
     // ページ上部にスクロール
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2724,6 +2844,10 @@
             ${amenityHtml ? `<div class="visit-amenities">${amenityHtml}</div>` : ''}
             ${v.comment ? `<div class="rec-comment">"${escHtml(v.comment)}"</div>` : ''}
 
+            <div style="margin-bottom:8px;">
+              <a class="yoyaku-btn" href="https://www.google.com/search?q=${encodeURIComponent(v.saunaName + ' 予約')}" target="_blank">📅 予約する</a>
+            </div>
+
             <div class="rec-card-footer">
               <span class="rec-date">登録: ${formatDate(v.createdAt)}</span>
               <button class="rec-delete-btn" onclick="deleteVisit(${v.id})" title="削除">×</button>
@@ -2745,6 +2869,62 @@
     } catch {
       showToast('削除に失敗しました');
     }
+  }
+
+  // ===== 次のサウナ：一覧読み込み =====
+  async function loadEvents() {
+    try {
+      const res = await fetch('/api/events');
+      const data = await res.json();
+      renderEvents(data);
+    } catch {
+      console.error('イベントの読み込みに失敗しました');
+    }
+  }
+
+  function renderEvents(list) {
+    const grid = document.getElementById('events-grid');
+
+    if (!list.length) {
+      grid.innerHTML = `
+        <div style="text-align:center;padding:40px 20px;color:var(--text-light);">
+          <div style="font-size:48px;margin-bottom:12px;">📅</div>
+          <p style="font-size:14px;line-height:1.8;">まだサウナ予定がありません。<br>Slackのサウナ部チャンネルにお誘いが投稿されると<br>ここに自動で表示されます！</p>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(e => {
+      let monthStr = '';
+      let dayStr = '';
+      if (e.eventDate) {
+        const d = new Date(e.eventDate + 'T00:00:00');
+        const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+        monthStr = months[d.getMonth()] || '';
+        dayStr = d.getDate();
+      }
+
+      return `
+        <div class="event-card">
+          <div class="event-date-box">
+            ${e.eventDate
+              ? `<div class="event-date-month">${monthStr}</div><div class="event-date-day">${dayStr}</div>`
+              : '<div class="event-date-day" style="font-size:20px;">未定</div>'}
+          </div>
+          <div class="event-info">
+            <div class="event-name">${escHtml(e.saunaName || '（サウナ名未定）')}</div>
+            <div class="event-meta">
+              ${e.location ? `<span>📍 ${escHtml(e.location)}</span>` : ''}
+              ${e.meetTime ? `<span>🕐 ${escHtml(e.meetTime)}${e.endTime ? ' 〜 ' + escHtml(e.endTime) : ''}</span>` : ''}
+            </div>
+            <div class="event-poster">投稿者: ${escHtml(e.posterName || '不明')}</div>
+            ${e.slackMessageUrl
+              ? `<a class="event-slack-link" href="${e.slackMessageUrl}" target="_blank">💬 Slackで見る</a>`
+              : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
   // ===== 浮かぶ絵文字 =====
