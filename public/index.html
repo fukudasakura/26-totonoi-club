@@ -572,6 +572,292 @@
       box-shadow: 0 -2px 8px var(--shadow-green);
     }
 
+    /* ===== 指南書 ===== */
+    .guide-hero {
+      text-align: center;
+      padding: 36px 22px;
+    }
+    .guide-hero-icon {
+      font-size: 52px;
+      margin-bottom: 10px;
+    }
+    .guide-hero-title {
+      font-family: 'Noto Sans JP', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--green-dark);
+      letter-spacing: 6px;
+      margin-bottom: 10px;
+    }
+    .guide-hero-sub {
+      font-size: 13px;
+      color: var(--text-mid);
+      letter-spacing: 1px;
+    }
+
+    /* セクション共通 */
+    .guide-section { padding: 22px; }
+    .guide-section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .guide-section-number {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent-blue);
+      opacity: 0.5;
+      line-height: 1;
+    }
+    .guide-section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+    .guide-text {
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--text-mid);
+      margin-bottom: 14px;
+    }
+    .guide-highlight {
+      color: var(--green-dark);
+      background: linear-gradient(transparent 60%, rgba(232,138,124,0.18) 60%);
+    }
+    .guide-golden {
+      color: #b8860b;
+      background: linear-gradient(transparent 60%, rgba(184,134,11,0.15) 60%);
+    }
+
+    /* 吹き出し */
+    .guide-callout {
+      display: flex;
+      gap: 12px;
+      background: var(--green-mist);
+      border-left: 3px solid var(--green-mid);
+      border-radius: 0 12px 12px 0;
+      padding: 14px 16px;
+      margin-top: 12px;
+    }
+    .guide-callout-icon { font-size: 22px; flex-shrink: 0; }
+    .guide-callout p {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-mid);
+    }
+
+    /* サイクル図 */
+    .guide-cycle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .guide-cycle-step {
+      text-align: center;
+      flex: 1;
+      min-width: 90px;
+      max-width: 140px;
+    }
+    .guide-cycle-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 8px;
+    }
+    .cycle-sauna { background: #fdf0ed; box-shadow: 0 2px 8px rgba(232,138,124,0.2); }
+    .cycle-water { background: #d4eef3; box-shadow: 0 2px 8px rgba(123,200,216,0.2); }
+    .cycle-rest  { background: #e8f5e9; box-shadow: 0 2px 8px rgba(76,175,80,0.15); }
+    .guide-cycle-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+    .guide-cycle-desc {
+      font-size: 11px;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+    .guide-cycle-desc small { color: var(--text-light); }
+    .guide-cycle-arrow {
+      font-size: 20px;
+      color: var(--text-light);
+      font-weight: 700;
+    }
+
+    /* タイムライン */
+    .guide-timeline {
+      position: relative;
+      padding-left: 20px;
+      border-left: 3px solid var(--accent-blue-light);
+    }
+    .guide-step {
+      position: relative;
+      margin-bottom: 24px;
+      padding-left: 16px;
+    }
+    .guide-step::before {
+      content: '';
+      position: absolute;
+      left: -28px;
+      top: 6px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      border: 3px solid var(--white);
+      box-shadow: 0 0 0 2px var(--accent-blue-light);
+    }
+    .guide-step-badge {
+      display: inline-block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent-blue);
+      background: var(--accent-blue-light);
+      padding: 2px 10px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+    .guide-step-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    .guide-step-list {
+      list-style: none;
+      padding: 0;
+    }
+    .guide-step-list li {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-mid);
+      padding: 2px 0;
+    }
+
+    /* サウナ用語ティップ */
+    .guide-tip {
+      background: linear-gradient(135deg, rgba(123,200,216,0.1), rgba(232,138,124,0.08));
+      border: 1.5px dashed var(--accent-blue);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-mid);
+    }
+    .guide-tip-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-blue);
+      background: var(--accent-blue-light);
+      padding: 1px 8px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+    }
+
+    /* サウナの種類グリッド */
+    .guide-types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .guide-type-card {
+      text-align: center;
+      border: 1.5px solid var(--green-pale);
+      border-radius: 14px;
+      padding: 18px 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .guide-type-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px var(--shadow-green);
+    }
+    .guide-type-icon { font-size: 32px; margin-bottom: 8px; }
+    .guide-type-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+    .guide-type-temp {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green-mid);
+      margin-bottom: 6px;
+    }
+    .guide-type-desc {
+      font-size: 12px;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* マナーグリッド */
+    .guide-manner-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .guide-manner-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+    .manner-ok { background: var(--accent-blue-light); }
+    .manner-ng { background: #fdf0ed; }
+    .manner-icon { font-size: 20px; flex-shrink: 0; }
+
+    /* 健康効果 */
+    .guide-effects {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .guide-effect-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+    .guide-effect-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .guide-effect-tag {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+    .effect-body { background: #fdf0ed; color: #c96b62; }
+    .effect-mind { background: var(--accent-blue-light); color: #4a9aaa; }
+
+    @media (max-width: 500px) {
+      .guide-cycle { gap: 4px; }
+      .guide-cycle-step { min-width: 70px; }
+      .guide-cycle-icon { width: 50px; height: 50px; font-size: 22px; }
+      .guide-cycle-arrow { font-size: 16px; }
+      .guide-types-grid { grid-template-columns: 1fr 1fr; }
+      .guide-hero-title { font-size: 22px; letter-spacing: 3px; }
+    }
+
     /* ===== 訪問記録 ===== */
     .section-card {
       background: var(--white);
@@ -1057,14 +1343,229 @@
 </header>
 
 <nav id="tab-bar">
-  <button class="tab-btn active" data-tab="recommend">&#9832; おすすめ</button>
-  <button class="tab-btn" data-tab="visits">&#128221; 訪問記録</button>
+  <button class="tab-btn active" data-tab="guide">&#128293; 指南書</button>
+  <button class="tab-btn" data-tab="recommend">&#9832; おすすめ</button>
+  <button class="tab-btn" data-tab="visits">&#128099; 訪問記録</button>
 </nav>
 
 <main>
 
+  <!-- ===== 指南書タブ ===== -->
+  <div id="tab-guide">
+
+    <!-- ヒーロー -->
+    <section class="guide-hero section-card">
+      <div class="guide-hero-icon">🔥</div>
+      <h2 class="guide-hero-title">サウナの極意</h2>
+      <p class="guide-hero-sub">初心者からサウナーまで、「ととのう」への道を指南します</p>
+    </section>
+
+    <!-- セクション1：ととのうとは -->
+    <section class="guide-section section-card">
+      <div class="guide-section-header">
+        <span class="guide-section-number">01</span>
+        <h3 class="guide-section-title">「ととのう」とは？</h3>
+      </div>
+      <p class="guide-text">
+        サウナ → 水風呂 → 外気浴の一連の流れで訪れる、<strong class="guide-highlight">心身ともに心地よい特別なリラックス状態</strong>。
+      </p>
+      <div class="guide-callout">
+        <span class="guide-callout-icon">✨</span>
+        <p>体がふわっと軽くなり、頭がスッキリしつつも意識は冴えわたる——<br>それが「ととのう」感覚です。</p>
+      </div>
+    </section>
+
+    <!-- セクション2：科学的メカニズム -->
+    <section class="guide-section section-card">
+      <div class="guide-section-header">
+        <span class="guide-section-number">02</span>
+        <h3 class="guide-section-title">科学的なメカニズム</h3>
+      </div>
+      <div class="guide-cycle">
+        <div class="guide-cycle-step">
+          <div class="guide-cycle-icon cycle-sauna">🔥</div>
+          <div class="guide-cycle-label">サウナ</div>
+          <div class="guide-cycle-desc">交感神経が活性化<br><small>興奮・緊張モード</small></div>
+        </div>
+        <div class="guide-cycle-arrow">→</div>
+        <div class="guide-cycle-step">
+          <div class="guide-cycle-icon cycle-water">💧</div>
+          <div class="guide-cycle-label">水風呂</div>
+          <div class="guide-cycle-desc">交感神経がさらに刺激<br><small>ピークに達する</small></div>
+        </div>
+        <div class="guide-cycle-arrow">→</div>
+        <div class="guide-cycle-step">
+          <div class="guide-cycle-icon cycle-rest">🌿</div>
+          <div class="guide-cycle-label">外気浴</div>
+          <div class="guide-cycle-desc">副交感神経が優位に<br><small>リラックスモード</small></div>
+        </div>
+      </div>
+      <div class="guide-callout">
+        <span class="guide-callout-icon">🧠</span>
+        <p><strong>ととのいの正体</strong>：アドレナリンが残った状態で副交感神経が優位になる稀有な状態。<br>
+        β-エンドルフィン・セロトニン・オキシトシンが分泌され、多幸感・リラックス・安心感に包まれます。</p>
+      </div>
+    </section>
+
+    <!-- セクション3：基本の入り方 -->
+    <section class="guide-section section-card">
+      <div class="guide-section-header">
+        <span class="guide-section-number">03</span>
+        <h3 class="guide-section-title">基本の入り方（5ステップ）</h3>
+      </div>
+      <div class="guide-timeline">
+
+        <div class="guide-step">
+          <div class="guide-step-badge">STEP 1</div>
+          <div class="guide-step-title">事前準備</div>
+          <ul class="guide-step-list">
+            <li>💧 <strong>水分補給</strong>：2〜3セットで普通体型500ml、大柄な人1L目安</li>
+            <li>🧼 体と髪をきれいに洗う</li>
+            <li>🧴 体の水分をタオルで拭き取る（発汗しやすくなる）</li>
+          </ul>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-badge">STEP 2</div>
+          <div class="guide-step-title">サウナに入る 🔥</div>
+          <ul class="guide-step-list">
+            <li>時間より<strong>「体の感覚」</strong>で判断：背中の中心が温まったらOK</li>
+            <li>心拍数が<strong>平常時の約2倍</strong>になったら退出サイン</li>
+            <li>初心者は下段から、慣れたら上段へ</li>
+          </ul>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-badge">STEP 3</div>
+          <div class="guide-step-title">水風呂に入る 💧</div>
+          <ul class="guide-step-list">
+            <li>入る前に必ず<strong>かけ湯で汗を流す</strong></li>
+            <li>大きく息を吸い、<strong>吐きながら</strong>静かに入水</li>
+            <li>目安は約1分。<strong>「気道がスースーする」</strong>感覚が退出サイン</li>
+          </ul>
+          <div class="guide-tip">
+            <span class="guide-tip-label">🫧 サウナ用語</span>
+            <strong>「温度の羽衣」</strong>：20〜30秒じっとしていると体の周りに感じる膜のような感覚。冷たさが和らぎ、水と一体化するような不思議な体験。
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-badge">STEP 4</div>
+          <div class="guide-step-title">外気浴（休憩） 🌿</div>
+          <ul class="guide-step-list">
+            <li>ととのい椅子でゆったり<strong>5〜10分</strong></li>
+            <li>水風呂を出てからの<strong class="guide-golden">「最初の2分」がゴールデンタイム</strong></li>
+            <li>目を閉じて深呼吸し、体の感覚に意識を向ける</li>
+          </ul>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-step-badge">STEP 5</div>
+          <div class="guide-step-title">セットを繰り返す 🔄</div>
+          <ul class="guide-step-list">
+            <li><strong>2〜3セット</strong>が目安</li>
+            <li>初心者は1セットからでOK！無理せず自分のペースで</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- セクション4：サウナの種類 -->
+    <section class="guide-section section-card">
+      <div class="guide-section-header">
+        <span class="guide-section-number">04</span>
+        <h3 class="guide-section-title">サウナの種類</h3>
+      </div>
+      <div class="guide-types-grid">
+        <div class="guide-type-card">
+          <div class="guide-type-icon">🔥</div>
+          <div class="guide-type-name">ドライサウナ</div>
+          <div class="guide-type-temp">80〜100°C</div>
+          <div class="guide-type-desc">低湿度で高温。日本で最もポピュラーなタイプ。</div>
+        </div>
+        <div class="guide-type-card">
+          <div class="guide-type-icon">💨</div>
+          <div class="guide-type-name">スチームサウナ</div>
+          <div class="guide-type-temp">40〜60°C</div>
+          <div class="guide-type-desc">高湿度で肌に優しい。美容効果が高い。</div>
+        </div>
+        <div class="guide-type-card">
+          <div class="guide-type-icon">🌡️</div>
+          <div class="guide-type-name">遠赤外線サウナ</div>
+          <div class="guide-type-temp">40〜60°C</div>
+          <div class="guide-type-desc">低温で体を芯から温める。サウナ初心者にもおすすめ。</div>
+        </div>
+        <div class="guide-type-card">
+          <div class="guide-type-icon">🪵</div>
+          <div class="guide-type-name">フィンランド式・ロウリュ</div>
+          <div class="guide-type-temp">60〜80°C</div>
+          <div class="guide-type-desc">サウナストーンに水をかけ蒸気を立てる本場スタイル。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- セクション5：注意点・マナー -->
+    <section class="guide-section section-card">
+      <div class="guide-section-header">
+        <span class="guide-section-number">05</span>
+        <h3 class="guide-section-title">注意点・マナー</h3>
+      </div>
+      <div class="guide-manner-grid">
+        <div class="guide-manner-item manner-ng">
+          <span class="manner-icon">🚫</span>
+          <span>体調不良・二日酔い時はNG</span>
+        </div>
+        <div class="guide-manner-item manner-ok">
+          <span class="manner-icon">💧</span>
+          <span>セット間の水分補給を忘れずに</span>
+        </div>
+        <div class="guide-manner-item manner-ok">
+          <span class="manner-icon">🧴</span>
+          <span>タオルを座席に敷く</span>
+        </div>
+        <div class="guide-manner-item manner-ng">
+          <span class="manner-icon">🤫</span>
+          <span>大声での会話を避ける</span>
+        </div>
+        <div class="guide-manner-item manner-ok">
+          <span class="manner-icon">🚿</span>
+          <span>水風呂前に必ず汗を流す</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- セクション6：健康効果 -->
+    <section class="guide-section section-card">
+      <div class="guide-section-header">
+        <span class="guide-section-number">06</span>
+        <h3 class="guide-section-title">健康効果</h3>
+      </div>
+      <div class="guide-effects">
+        <div class="guide-effect-group">
+          <div class="guide-effect-label">🏃 身体への効果</div>
+          <div class="guide-effect-tags">
+            <span class="guide-effect-tag effect-body">血行促進</span>
+            <span class="guide-effect-tag effect-body">新陳代謝アップ</span>
+            <span class="guide-effect-tag effect-body">免疫力向上</span>
+            <span class="guide-effect-tag effect-body">むくみ改善</span>
+          </div>
+        </div>
+        <div class="guide-effect-group">
+          <div class="guide-effect-label">🧘 精神への効果</div>
+          <div class="guide-effect-tags">
+            <span class="guide-effect-tag effect-mind">ストレス軽減</span>
+            <span class="guide-effect-tag effect-mind">睡眠の質向上</span>
+            <span class="guide-effect-tag effect-mind">集中力アップ</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
   <!-- ===== おすすめタブ ===== -->
-  <div id="tab-recommend">
+  <div id="tab-recommend" style="display: none;">
     <section id="search-section">
       <div class="section-title">サウナを検索</div>
       <div class="search-bar">
@@ -1488,6 +1989,7 @@
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const tab = btn.dataset.tab;
+      document.getElementById('tab-guide').style.display     = tab === 'guide'     ? '' : 'none';
       document.getElementById('tab-recommend').style.display = tab === 'recommend' ? '' : 'none';
       document.getElementById('tab-visits').style.display    = tab === 'visits'    ? '' : 'none';
       if (tab === 'visits') loadVisits();
