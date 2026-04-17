@@ -512,6 +512,83 @@
     }
     .ikitai-btn:active { transform: scale(0.97); }
 
+    .rec-btn-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .itta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      background: #e8f5e9;
+      color: #43a047;
+      border: 1.5px solid #c8e6c9;
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
+      letter-spacing: 0.5px;
+    }
+    .itta-btn:hover {
+      background: #43a047;
+      color: white;
+      border-color: #43a047;
+      transform: scale(1.04);
+    }
+    .itta-btn:active { transform: scale(0.97); }
+
+    .kiroku-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      background: #f5f5f5;
+      color: #666;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.1s;
+      letter-spacing: 0.5px;
+    }
+    .kiroku-btn:hover {
+      background: #666;
+      color: white;
+      border-color: #666;
+      transform: scale(1.04);
+    }
+    .kiroku-btn:active { transform: scale(0.97); }
+
+    /* 訪問記録ハイライト */
+    .visit-card.highlighted {
+      border-color: #43a047;
+      box-shadow: 0 0 0 3px rgba(67,160,71,0.2), 0 8px 24px rgba(67,160,71,0.15);
+      animation: highlightPulse 1.5s ease;
+    }
+    @keyframes highlightPulse {
+      0%   { box-shadow: 0 0 0 6px rgba(67,160,71,0.3); }
+      100% { box-shadow: 0 0 0 3px rgba(67,160,71,0.2), 0 8px 24px rgba(67,160,71,0.15); }
+    }
+    /* 該当なしメッセージ */
+    .no-visit-msg {
+      text-align: center;
+      padding: 24px 16px;
+      background: #e8f5e9;
+      border: 1.5px dashed #c8e6c9;
+      border-radius: 14px;
+      color: #43a047;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
     /* 空状態 */
     #empty-state {
       text-align: center;
@@ -997,6 +1074,114 @@
       background: var(--accent-blue-light);
       color: #4a9aaa;
       font-weight: 600;
+    }
+
+    /* ===== フローティングシャボン玉ナビ ===== */
+    #bubble-nav {
+      position: fixed;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 14px;
+    }
+    .bubble-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .bubble-btn {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.6);
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.45) 0%,
+        rgba(123,200,216,0.25) 40%,
+        rgba(232,138,124,0.2) 70%,
+        rgba(255,255,255,0.35) 100%
+      );
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow:
+        0 4px 16px rgba(123,200,216,0.2),
+        0 2px 8px rgba(0,0,0,0.06),
+        inset 0 1px 2px rgba(255,255,255,0.5);
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.3s, border-color 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    /* ツヤ（上部ハイライト） */
+    .bubble-btn::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 20%;
+      width: 60%;
+      height: 40%;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.7), transparent);
+      pointer-events: none;
+    }
+    .bubble-btn:hover {
+      transform: scale(1.18);
+      box-shadow:
+        0 6px 24px rgba(123,200,216,0.35),
+        0 2px 12px rgba(0,0,0,0.08),
+        inset 0 1px 3px rgba(255,255,255,0.6);
+      border-color: rgba(255,255,255,0.85);
+    }
+    .bubble-btn.active {
+      width: 54px; height: 54px;
+      font-size: 23px;
+      border-color: rgba(255,255,255,0.9);
+      box-shadow:
+        0 0 18px rgba(123,200,216,0.4),
+        0 6px 20px rgba(123,200,216,0.25),
+        inset 0 1px 3px rgba(255,255,255,0.6);
+      animation: bubbleGlow 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes bubbleGlow {
+      from { box-shadow: 0 0 12px rgba(123,200,216,0.3), 0 6px 20px rgba(123,200,216,0.2), inset 0 1px 3px rgba(255,255,255,0.5); }
+      to   { box-shadow: 0 0 24px rgba(123,200,216,0.5), 0 6px 24px rgba(232,138,124,0.2), inset 0 1px 3px rgba(255,255,255,0.7); }
+    }
+    /* ラベル（ホバーで左に表示） */
+    .bubble-label {
+      position: absolute;
+      right: 60px;
+      white-space: nowrap;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      color: var(--text-dark);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      opacity: 0;
+      transform: translateX(8px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+    }
+    .bubble-item:hover .bubble-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    @media (max-width: 500px) {
+      #bubble-nav { right: 6px; gap: 10px; }
+      .bubble-btn { width: 42px; height: 42px; font-size: 18px; }
+      .bubble-btn.active { width: 48px; height: 48px; font-size: 20px; }
+      .bubble-label { display: none; }
     }
 
     /* ===== 暖簾スクリーン（レトロ銭湯風） ===== */
@@ -1744,6 +1929,22 @@
 
 <div id="toast"></div>
 
+<!-- フローティングシャボン玉ナビ -->
+<nav id="bubble-nav">
+  <div class="bubble-item">
+    <span class="bubble-label">指南書</span>
+    <button class="bubble-btn active" data-bubble="guide">🔥</button>
+  </div>
+  <div class="bubble-item">
+    <span class="bubble-label">おすすめ</span>
+    <button class="bubble-btn" data-bubble="recommend">♨</button>
+  </div>
+  <div class="bubble-item">
+    <span class="bubble-label">訪問記録</span>
+    <button class="bubble-btn" data-bubble="visits">👣</button>
+  </div>
+</nav>
+
 <script>
   const API = '';  // 同じホスト
 
@@ -1883,15 +2084,20 @@
   // ===== 一覧読み込み =====
   async function loadRecommendations() {
     try {
-      const res  = await fetch('/api/recommendations');
-      const data = await res.json();
-      renderRecommendations(data);
+      const [recRes, visitRes] = await Promise.all([
+        fetch('/api/recommendations'),
+        fetch('/api/visits'),
+      ]);
+      const recs   = await recRes.json();
+      const visits = await visitRes.json();
+      const visitedNames = new Set(visits.map(v => v.saunaName));
+      renderRecommendations(recs, visitedNames);
     } catch {
       console.error('一覧の読み込みに失敗しました');
     }
   }
 
-  function renderRecommendations(list) {
+  function renderRecommendations(list, visitedNames = new Set()) {
     const grid   = document.getElementById('recommendations-grid');
     const count  = document.getElementById('rec-count');
     count.textContent = list.length ? `（${list.length}件）` : '';
@@ -1937,9 +2143,15 @@
 
           ${r.comment ? `<div class="rec-comment">"${escHtml(r.comment)}"</div>` : ''}
 
-          ${r.saunaUrl
-            ? `<a class="ikitai-btn" href="${r.saunaUrl}" target="_blank">♨ 行きたい！</a>`
-            : ''}
+          <div class="rec-btn-row">
+            ${r.saunaUrl
+              ? `<a class="ikitai-btn" href="${r.saunaUrl}" target="_blank">♨ 行きたい！</a>`
+              : ''}
+            ${visitedNames.has(r.saunaName)
+              ? `<button class="itta-btn" onclick="showVisitRecords('${escHtml(r.saunaName).replace(/'/g,"\\'")}')">&check; 行った！</button>`
+              : ''}
+            <button class="kiroku-btn" onclick="goToVisitForm({id:'${r.saunaId||''}',name:'${escHtml(r.saunaName).replace(/'/g,"\\'")}',url:'${r.saunaUrl||''}',image:'${r.saunaImage||''}',area:'${escHtml(r.saunaArea||'').replace(/'/g,"\\'")}'})">✏️ 記録を書く</button>
+          </div>
 
           <div class="rec-card-footer">
             <span class="rec-date">${formatDate(r.createdAt)}</span>
@@ -1983,18 +2195,123 @@
     }, 750);
   });
 
-  // ===== タブ切り替え =====
+  // ===== タブ切り替え（共通） =====
+  function switchTab(tab) {
+    // 上部タブバーの状態更新
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const topBtn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+    if (topBtn) topBtn.classList.add('active');
+
+    // シャボン玉ナビの状態更新
+    document.querySelectorAll('.bubble-btn').forEach(b => b.classList.remove('active'));
+    const bubbleBtn = document.querySelector(`.bubble-btn[data-bubble="${tab}"]`);
+    if (bubbleBtn) bubbleBtn.classList.add('active');
+
+    // コンテンツ切り替え
+    document.getElementById('tab-guide').style.display     = tab === 'guide'     ? '' : 'none';
+    document.getElementById('tab-recommend').style.display = tab === 'recommend' ? '' : 'none';
+    document.getElementById('tab-visits').style.display    = tab === 'visits'    ? '' : 'none';
+    if (tab === 'visits') loadVisits();
+
+    // ページ上部にスクロール
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // 上部タブバー
   document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const tab = btn.dataset.tab;
-      document.getElementById('tab-guide').style.display     = tab === 'guide'     ? '' : 'none';
-      document.getElementById('tab-recommend').style.display = tab === 'recommend' ? '' : 'none';
-      document.getElementById('tab-visits').style.display    = tab === 'visits'    ? '' : 'none';
-      if (tab === 'visits') loadVisits();
-    });
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
   });
+
+  // シャボン玉ナビ
+  document.querySelectorAll('.bubble-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.bubble));
+  });
+
+  // ===== おすすめ→訪問記録 連携 =====
+  // 「行った！」→ そのサウナの訪問記録を表示
+  async function showVisitRecords(saunaName) {
+    // タブを訪問記録に切り替え
+    switchTab('visits');
+
+    // 訪問記録を読み込み
+    try {
+      const res  = await fetch('/api/visits');
+      const data = await res.json();
+      renderVisits(data);
+
+      // 既存のハイライト・メッセージをクリア
+      document.querySelectorAll('.visit-card.highlighted').forEach(c => c.classList.remove('highlighted'));
+      const oldMsg = document.getElementById('no-visit-msg');
+      if (oldMsg) oldMsg.remove();
+
+      // そのサウナの記録を探してハイライト
+      const cards = document.querySelectorAll('.visit-card');
+      let found = false;
+      let firstMatch = null;
+      cards.forEach(card => {
+        const nameEl = card.querySelector('.rec-card-name');
+        if (nameEl && nameEl.textContent.trim() === saunaName) {
+          card.classList.add('highlighted');
+          if (!firstMatch) firstMatch = card;
+          found = true;
+        }
+      });
+
+      if (found && firstMatch) {
+        firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        // 記録がない場合メッセージを表示
+        const grid = document.getElementById('visits-grid');
+        const msg = document.createElement('div');
+        msg.id = 'no-visit-msg';
+        msg.className = 'no-visit-msg';
+        msg.textContent = `「${saunaName}」の訪問記録はまだありません。記録を書いてみよう！`;
+        grid.parentElement.insertBefore(msg, grid);
+        msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } catch {
+      showToast('訪問記録の読み込みに失敗しました');
+    }
+  }
+
+  // 「記録を書く」→ フォームを自動入力
+  function goToVisitForm(sauna) {
+    // タブを訪問記録に切り替え（スクロールはフォームに合わせるので後で）
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('[data-tab="visits"]').classList.add('active');
+    document.querySelectorAll('.bubble-btn').forEach(b => b.classList.remove('active'));
+    const vBubble = document.querySelector('[data-bubble="visits"]');
+    if (vBubble) vBubble.classList.add('active');
+    document.getElementById('tab-guide').style.display     = 'none';
+    document.getElementById('tab-recommend').style.display = 'none';
+    document.getElementById('tab-visits').style.display    = '';
+
+    // フォームにサウナ情報をセット
+    selectedVisitSauna = sauna;
+    document.getElementById('vf-sauna-id').value    = sauna.id || '';
+    document.getElementById('vf-sauna-name').value  = sauna.name;
+    document.getElementById('vf-sauna-url').value   = sauna.url || '';
+    document.getElementById('vf-sauna-image').value = sauna.image || '';
+    document.getElementById('vf-sauna-area').value  = sauna.area || '';
+
+    // プレビュー表示
+    document.getElementById('visit-selected-preview').innerHTML = `
+      ${sauna.image
+        ? `<img src="${sauna.image}" alt="${sauna.name}" onerror="this.style.display='none'">`
+        : ''}
+      <div>
+        <div class="preview-name">${sauna.name}</div>
+        ${sauna.url ? `<a class="preview-link" href="${sauna.url}" target="_blank">サウナ行きたいで見る →</a>` : ''}
+      </div>
+    `;
+
+    // フォームを表示してスクロール
+    const sec = document.getElementById('visit-register-section');
+    sec.style.display = 'block';
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    loadVisits();
+  }
 
   // ===== 訪問記録：検索 =====
   let selectedVisitSauna = null;
@@ -2155,6 +2472,7 @@
       document.querySelectorAll('.crowd-icon').forEach(el => el.classList.remove('active'));
       document.getElementById('vf-am-towel-price').style.display = 'none';
       loadVisits();
+      loadRecommendations();
     } catch {
       showToast('登録に失敗しました');
     }
@@ -2247,6 +2565,7 @@
       await fetch(`/api/visits/${id}`, { method: 'DELETE' });
       showToast('削除しました');
       loadVisits();
+      loadRecommendations();
     } catch {
       showToast('削除に失敗しました');
     }
